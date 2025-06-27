@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#DOCUMENTS FOLDER 
+# This is a folder where you can store documents related to the project.
+# It is not necessary to include it in the version control system.
+
+Documents/*
+
