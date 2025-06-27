@@ -1,0 +1,5 @@
+// 1. Create your page component
+// 2. Define echo data (title, context, colors)
+// 3. Define form fields array
+// 4. Handle navigation between echo and form
+// 5. Process final data
