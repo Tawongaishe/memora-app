@@ -1,19 +1,26 @@
 // src/pages/SimpleAcknowledgmentsPage.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UniversalEchoPage from '../components/common/UniversalEchoPage';
 import UniversalFormPage from '../components/common/UniversalFormPage';
+import { MEMORA_GRADIENTS } from '../components/styles/MemoraStyles';
+import { getNextPage, getProgress } from '../utils/navigation';
 
 const SimpleAcknowledgmentsPage = () => {
   const [currentStep, setCurrentStep] = useState('echo');
   const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
+  const currentPath = '/acknowledgements';
+  const progress = getProgress(currentPath);
 
   // Echo page data for Acknowledgments
   const echoData = {
     title: "Acknowledgements",
     culturalContext: "The acknowledgement section expresses the family's heartfelt thanks to everyone who offered support, love, and kindness during their time of loss.",
     historicalNote: "In many African traditions, community support during times of grief is considered sacred. The Yoruba concept of 'Àwọn ará' emphasizes how the community becomes family during moments of celebration and mourning.",
-    gradientColors: ['#4a154b', '#350d36', '#1a0a1b'], // Purple gradient
-    progressStep: 4
+    gradientColors: MEMORA_GRADIENTS.ACKNOWLEDGMENTS, // Purple to Teal gradient
+    //  ['#4a154b', '#350d36', '#1a0a1b'], // Purple gradient
+    progressStep: progress.current - 1
   };
 
   // Simple form with just one text area - perfect for acknowledgments
@@ -41,7 +48,13 @@ const SimpleAcknowledgmentsPage = () => {
   const handleFormNext = (data) => {
     setFormData(data);
     console.log('Acknowledgments data:', data);
-    alert('Acknowledgments completed! Check console for data.');
+    
+    const nextPage = getNextPage(currentPath);
+    if (nextPage) {
+      navigate(nextPage.path);
+    } else {
+      alert('Memorial planning completed!');
+    }
   };
 
   if (currentStep === 'echo') {
@@ -65,7 +78,7 @@ const SimpleAcknowledgmentsPage = () => {
         formFields={formFields}
         onBack={handleFormBack}
         onNext={handleFormNext}
-        progressStep={5}
+        progressStep={progress.current}
         layout="single-column" // Single column layout for simple forms
         initialData={formData}
       />

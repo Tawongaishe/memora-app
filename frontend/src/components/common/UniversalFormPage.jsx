@@ -1,6 +1,7 @@
 // src/components/common/UniversalFormPage.jsx
 import React, { useState } from 'react';
 import { ChevronRight, Heart } from 'lucide-react';
+import { formPageStyles } from '../styles/MemoraStyles';
 
 const UniversalFormPage = ({ 
   title, 
@@ -33,215 +34,15 @@ const UniversalFormPage = ({
     }
   };
 
-  const getLayoutClass = () => {
-    switch (layout) {
-      case 'single-column':
-        return { gridTemplateColumns: '1fr' };
-      case 'two-column':
-        return { gridTemplateColumns: 'repeat(2, 1fr)' };
-      case 'grid':
-      default:
-        return { gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' };
-    }
-  };
-
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    header: {
-      background: 'rgba(255,255,255,0.8)',
-      backdropFilter: 'blur(8px)',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-      borderBottom: '1px solid rgba(0,0,0,0.05)',
-      padding: '1.5rem',
-      textAlign: 'center'
-    },
-    headerTitle: {
-      fontSize: '2rem',
-      fontFamily: 'Georgia, serif',
-      fontStyle: 'italic',
-      color: '#1f2937',
-      margin: '0 0 0.25rem 0'
-    },
-    headerSubtitle: {
-      fontSize: '0.875rem',
-      color: '#6b7280',
-      letterSpacing: '0.05em',
-      margin: 0
-    },
-    headerLine: {
-      width: '4rem',
-      height: '2px',
-      background: 'linear-gradient(to right, #9ca3af, transparent)',
-      margin: '0.5rem auto 0'
-    },
-    mainContent: {
-      flex: 1,
-      padding: '2rem',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      maxWidth: layout === 'single-column' ? '48rem' : '72rem',
-      margin: '0 auto',
-      width: '100%'
-    },
-    contentSection: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '2rem'
-    },
-    titleSection: {
-      textAlign: 'center',
-      marginBottom: '1rem'
-    },
-    titleDecorative: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '1rem',
-      marginBottom: '1rem'
-    },
-    titleDecorativeLine: {
-      width: '2rem',
-      height: '1px',
-      background: '#9ca3af'
-    },
-    formTitle: {
-      fontSize: '2rem',
-      fontWeight: '600',
-      color: '#111827',
-      margin: '0 0 0.75rem 0'
-    },
-    formPrompt: {
-      fontSize: '1.125rem',
-      color: '#374151',
-      lineHeight: '1.6',
-      maxWidth: '48rem',
-      margin: '0 auto'
-    },
-    formSection: {
-      display: 'grid',
-      ...getLayoutClass(),
-      gap: '1.5rem',
-      padding: '2rem',
-      background: 'rgba(255,255,255,0.5)',
-      backdropFilter: 'blur(4px)',
-      borderRadius: '1rem',
-      border: '1px solid rgba(0,0,0,0.05)',
-      boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-    },
-    formField: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem'
-    },
-    formLabel: {
-      fontSize: '0.875rem',
-      fontWeight: '500',
-      color: '#374151',
-      letterSpacing: '0.025em'
-    },
-    formInput: {
-      padding: '0.75rem 1rem',
-      border: '2px solid rgba(59, 130, 246, 0.3)',
-      borderRadius: '0.5rem',
-      fontSize: '1rem',
-      fontFamily: 'Georgia, serif',
-      color: '#374151',
-      background: 'white',
-      outline: 'none',
-      transition: 'all 0.3s ease'
-    },
-    formTextarea: {
-      padding: '0.75rem 1rem',
-      border: '2px solid rgba(59, 130, 246, 0.3)',
-      borderRadius: '0.5rem',
-      fontSize: '1rem',
-      fontFamily: 'Georgia, serif',
-      color: '#374151',
-      background: 'white',
-      outline: 'none',
-      transition: 'all 0.3s ease',
-      resize: 'vertical',
-      minHeight: '6rem'
-    },
-    formSelect: {
-      padding: '0.75rem 1rem',
-      border: '2px solid rgba(59, 130, 246, 0.3)',
-      borderRadius: '0.5rem',
-      fontSize: '1rem',
-      fontFamily: 'Georgia, serif',
-      color: '#374151',
-      background: 'white',
-      outline: 'none',
-      transition: 'all 0.3s ease',
-      cursor: 'pointer'
-    },
-    fullWidth: {
-      gridColumn: '1 / -1'
-    },
-    navigation: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingTop: '2rem'
-    },
-    backButton: {
-      color: '#6b7280',
-      background: 'none',
-      border: 'none',
-      fontWeight: '500',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      padding: '0.5rem 1rem',
-      borderRadius: '2rem',
-      transition: 'all 0.3s ease'
-    },
-    nextButton: {
-      padding: '1rem 2rem',
-      borderRadius: '2rem',
-      fontWeight: '500',
-      transition: 'all 0.3s ease',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.75rem',
-      boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '1rem'
-    },
-    progressSection: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginTop: '1.5rem'
-    },
-    progressDots: {
-      display: 'flex',
-      gap: '0.5rem'
-    },
-    progressDot: {
-      width: '8px',
-      height: '8px',
-      borderRadius: '50%',
-      transition: 'all 0.3s ease'
-    }
-  };
-
   const renderField = (field) => {
     const fieldStyle = {
-      ...styles.formField,
-      ...(field.fullWidth ? styles.fullWidth : {})
+      ...formPageStyles.formField,
+      ...(field.fullWidth ? formPageStyles.fullWidth : {})
     };
 
     return (
       <div key={field.name} style={fieldStyle}>
-        <label style={styles.formLabel}>
+        <label style={formPageStyles.formLabel}>
           {field.label} {field.required && <span style={{ color: '#ef4444' }}>*</span>}
         </label>
         
@@ -252,7 +53,7 @@ const UniversalFormPage = ({
             value={formData[field.name] || ''}
             onChange={(e) => handleFormChange(field.name, e.target.value)}
             style={{
-              ...styles.formInput,
+              ...formPageStyles.formInput,
               borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'
             }}
             onFocus={(e) => e.target.style.borderColor = 'rgba(59, 130, 246, 0.6)'}
@@ -267,7 +68,7 @@ const UniversalFormPage = ({
             value={formData[field.name] || ''}
             onChange={(e) => handleFormChange(field.name, e.target.value)}
             style={{
-              ...styles.formInput,
+              ...formPageStyles.formInput,
               borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'
             }}
             onFocus={(e) => e.target.style.borderColor = 'rgba(59, 130, 246, 0.6)'}
@@ -282,7 +83,7 @@ const UniversalFormPage = ({
             value={formData[field.name] || ''}
             onChange={(e) => handleFormChange(field.name, e.target.value)}
             style={{
-              ...styles.formInput,
+              ...formPageStyles.formInput,
               borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'
             }}
             onFocus={(e) => e.target.style.borderColor = 'rgba(59, 130, 246, 0.6)'}
@@ -296,9 +97,8 @@ const UniversalFormPage = ({
             value={formData[field.name] || ''}
             onChange={(e) => handleFormChange(field.name, e.target.value)}
             style={{
-              ...styles.formTextarea,
-              borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)',
-              minHeight: field.rows ? `${field.rows * 1.5}rem` : '6rem'
+              ...formPageStyles.formTextarea(field.rows),
+              borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'
             }}
             onFocus={(e) => e.target.style.borderColor = 'rgba(59, 130, 246, 0.6)'}
             onBlur={(e) => e.target.style.borderColor = formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'}
@@ -310,7 +110,7 @@ const UniversalFormPage = ({
             value={formData[field.name] || ''}
             onChange={(e) => handleFormChange(field.name, e.target.value)}
             style={{
-              ...styles.formSelect,
+              ...formPageStyles.formSelect,
               borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'
             }}
             onFocus={(e) => e.target.style.borderColor = 'rgba(59, 130, 246, 0.6)'}
@@ -324,6 +124,36 @@ const UniversalFormPage = ({
           </select>
         )}
 
+        {field.type === 'file' && (
+          <div>
+            <input
+              type="file"
+              accept={field.accept}
+              multiple={field.multiple}
+              onChange={(e) => {
+                const files = field.multiple ? Array.from(e.target.files) : e.target.files[0];
+                handleFormChange(field.name, files);
+              }}
+              style={{
+                ...formPageStyles.formInput,
+                borderColor: formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)',
+                padding: '0.5rem',
+                cursor: 'pointer'
+              }}
+              onFocus={(e) => e.target.style.borderColor = 'rgba(59, 130, 246, 0.6)'}
+              onBlur={(e) => e.target.style.borderColor = formData[field.name] ? 'rgba(59, 130, 246, 0.6)' : 'rgba(59, 130, 246, 0.3)'}
+            />
+            {formData[field.name] && (
+              <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
+                {field.multiple ? 
+                  `${formData[field.name].length} file(s) selected` : 
+                  `Selected: ${formData[field.name].name}`
+                }
+              </div>
+            )}
+          </div>
+        )}
+
         {field.helper && (
           <small style={{ color: '#6b7280', fontSize: '0.8rem' }}>
             {field.helper}
@@ -334,43 +164,45 @@ const UniversalFormPage = ({
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.headerTitle}>Memora</h1>
-        <p style={styles.headerSubtitle}>Legacy Builder</p>
-        <div style={styles.headerLine}></div>
+    <div style={formPageStyles.container}>
+      <div style={formPageStyles.header}>
+        <div style={formPageStyles.brandSection}>
+          <h1 style={formPageStyles.headerTitle}>Memora</h1>
+          <p style={formPageStyles.headerSubtitle}>Legacy Builder</p>
+          <div style={formPageStyles.headerLine}></div>
+        </div>
       </div>
 
-      <div style={styles.mainContent}>
-        <div style={styles.contentSection}>
-          <div style={styles.titleSection}>
-            <div style={styles.titleDecorative}>
-              <div style={styles.titleDecorativeLine}></div>
+      <div style={formPageStyles.mainContent(layout)}>
+        <div style={formPageStyles.contentSection}>
+          <div style={formPageStyles.titleSection}>
+            <div style={formPageStyles.titleDecorative}>
+              <div style={formPageStyles.titleDecorativeLine}></div>
               <Heart size={20} color="#9ca3af" />
-              <div style={styles.titleDecorativeLine}></div>
+              <div style={formPageStyles.titleDecorativeLine}></div>
             </div>
             
-            <h2 style={styles.formTitle}>
+            <h2 style={formPageStyles.formTitle}>
               {title}
             </h2>
             
             {prompt && (
-              <p style={styles.formPrompt}>
+              <p style={formPageStyles.formPrompt}>
                 {prompt}
               </p>
             )}
           </div>
 
-          <div style={styles.formSection}>
+          <div style={formPageStyles.formSection(layout)}>
             {formFields.map(renderField)}
           </div>
         </div>
 
         <div>
-          <div style={styles.navigation}>
+          <div style={formPageStyles.navigation}>
             <button
               onClick={onBack}
-              style={styles.backButton}
+              style={formPageStyles.backButton}
               onMouseEnter={(e) => {
                 e.target.style.color = '#374151';
                 e.target.style.background = 'rgba(0,0,0,0.05)';
@@ -388,7 +220,7 @@ const UniversalFormPage = ({
               onClick={handleNext}
               disabled={!isFormValid()}
               style={{
-                ...styles.nextButton,
+                ...formPageStyles.nextButton,
                 background: isFormValid() ? '#10b981' : '#d1d5db',
                 color: isFormValid() ? 'white' : '#6b7280',
                 cursor: isFormValid() ? 'pointer' : 'not-allowed'
@@ -409,13 +241,16 @@ const UniversalFormPage = ({
             </button>
           </div>
           
-          <div style={styles.progressSection}>
-            <div style={styles.progressDots}>
+          <div style={formPageStyles.progressSection}>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
               {[...Array(totalSteps)].map((_, i) => (
                 <div
                   key={i}
                   style={{
-                    ...styles.progressDot,
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    transition: 'all 0.3s ease',
                     background: i === progressStep ? '#10b981' : i < progressStep ? '#3b82f6' : '#d1d5db'
                   }}
                 />
