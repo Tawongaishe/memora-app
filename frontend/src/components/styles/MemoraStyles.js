@@ -19,7 +19,8 @@ export const MEMORA_COLORS = {
     EULOGY: ['#BFA98A', '#AFA3BF', '#9B8FA8'],
     SERVICE: ['#E4F2EE', '#D9D9D9', '#B4D9CE'],
     PHOTOS: ['#AFA3BF', '#B4D9CE', '#BFA98A'],
-    REVIEW: ['#CDC1D9', '#E4F2EE', '#D9D9D9']
+    REVIEW: ['#CDC1D9', '#E4F2EE', '#D9D9D9'],
+    DARK: ['#1A0A1B', '#350D36', '#4A154B'],
   };
   
   // Echo Page Styles
