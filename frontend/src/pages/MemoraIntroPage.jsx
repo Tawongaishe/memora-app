@@ -7,7 +7,7 @@ import { echoPageStyles, MEMORA_GRADIENTS } from '../components/styles/MemoraSty
 const MemoraIntroPage = () => {
   const navigate = useNavigate();
 
-  const gradientColors = MEMORA_GRADIENTS.OBITUARY; // Purple to Brown gradient - darker tones
+  const gradientColors = MEMORA_GRADIENTS.DARK; // Dark gradient for better contrast
 
   useEffect(() => {
     // Add CSS animation to the document head
@@ -79,9 +79,30 @@ const MemoraIntroPage = () => {
             Welcome to Memora
           </h2>
           
-          <p style={{ ...echoPageStyles.culturalText, fontSize: '1.5rem', maxWidth: '50rem', marginBottom: '3rem' }}>
-            A compassionate digital companion for creating meaningful memorials that honor your loved one's legacy with dignity, cultural sensitivity, and personal touch.
+          <p style={{ ...echoPageStyles.culturalText, fontSize: '1.5rem', maxWidth: '50rem', marginBottom: '2rem' }}>
+            We guide you step-by-step through creating a beautiful funeral or celebration of life program that you can print as a professional PDF.
           </p>
+          
+          <div style={{
+            background: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '1rem',
+            padding: '2rem',
+            border: '1px solid rgba(255,255,255,0.2)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            maxWidth: '50rem',
+            margin: '0 auto 3rem auto'
+          }}>
+            <p style={{ 
+              fontSize: '1.25rem', 
+              color: 'rgba(255,255,255,0.95)', 
+              margin: '0',
+              fontWeight: '500',
+              textAlign: 'center'
+            }}>
+              Turn grief into celebration with a meaningful, personalized journey of remembrance.
+            </p>
+          </div>
           
           <div style={echoPageStyles.titleUnderline}></div>
         </div>
@@ -97,31 +118,12 @@ const MemoraIntroPage = () => {
             maxWidth: '20rem',
             textAlign: 'center'
           }}>
-            <Users size={48} color="rgba(255,255,255,0.9)" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.95)', marginBottom: '1rem' }}>
-              Honor Their Story
-            </h3>
-            <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6' }}>
-              Celebrate their life with culturally rich storytelling that preserves their legacy for future generations.
-            </p>
-          </div>
-
-          <div style={{
-            background: 'rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-            maxWidth: '20rem',
-            textAlign: 'center'
-          }}>
             <BookOpen size={48} color="rgba(255,255,255,0.9)" style={{ marginBottom: '1rem' }} />
             <h3 style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.95)', marginBottom: '1rem' }}>
-              Guided Planning
+              Step-by-Step Forms
             </h3>
             <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6' }}>
-              Step-by-step guidance through every aspect of memorial planning with cultural context and wisdom.
+              Fill out simple forms for obituary, photos, speeches, and service details - we'll organize everything for you.
             </p>
           </div>
 
@@ -137,10 +139,29 @@ const MemoraIntroPage = () => {
           }}>
             <Camera size={48} color="rgba(255,255,255,0.9)" style={{ marginBottom: '1rem' }} />
             <h3 style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.95)', marginBottom: '1rem' }}>
-              Beautiful Memories
+              Professional PDF
             </h3>
             <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6' }}>
-              Create lasting tributes with photos, stories, and memories that capture their essence.
+              Get a beautifully formatted program ready to print for the funeral home, church, or family gathering.
+            </p>
+          </div>
+
+          <div style={{
+            background: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '1rem',
+            padding: '2rem',
+            border: '1px solid rgba(255,255,255,0.2)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            maxWidth: '20rem',
+            textAlign: 'center'
+          }}>
+            <Users size={48} color="rgba(255,255,255,0.9)" style={{ marginBottom: '1rem' }} />
+            <h3 style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.95)', marginBottom: '1rem' }}>
+              Meaningful Journey
+            </h3>
+            <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6' }}>
+              Each step includes cultural wisdom and gentle guidance to help you honor their life with dignity.
             </p>
           </div>
         </div>
