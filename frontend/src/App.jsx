@@ -1,6 +1,8 @@
 // src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import MemoraIntroPage from './pages/MemoraIntroPage';
+import FuneralChecklistPage from './pages/FuneralChecklistPage';
 import ModularObituaryPage from './pages/ModularObitPage';
 import SimpleAcknowledgmentsPage from './pages/SimpleAcknowledgementsPage';
 import PhotoSelectionPage from './pages/PhotoSelectionPage';
@@ -14,8 +16,11 @@ function App() {
     <Router>
       <div style={{ width: '100%', height: '100vh' }}>
         <Routes>
-          {/* Default route - redirect to obituary */}
-          <Route path="/" element={<Navigate to="/obituary" replace />} />
+          {/* Default route - Memora introduction */}
+          <Route path="/" element={<MemoraIntroPage />} />
+          
+          {/* Funeral checklist */}
+          <Route path="/funeral-checklist" element={<FuneralChecklistPage />} />
           
           {/* Individual passage routes */}
           <Route path="/obituary" element={<ModularObituaryPage />} />
