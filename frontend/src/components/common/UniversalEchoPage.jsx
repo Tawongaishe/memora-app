@@ -11,7 +11,11 @@ const UniversalEchoPage = ({
   gradientColors = ['#4a154b', '#350d36', '#1a0a1b'],
   progressStep = 0,
   totalSteps = 8,
-  autoPlayAudio = true 
+  autoPlayAudio = true,
+  // add background image 
+  backgroundImage = null,
+  imageSize = 'cover',
+  imagePosition = 'center'
 }) => {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [audioMuted, setAudioMuted] = useState(false);
@@ -31,7 +35,7 @@ const UniversalEchoPage = ({
   };
 
   return (
-    <div style={echoPageStyles.container(gradientColors)}>
+    <div style={echoPageStyles.container(gradientColors, backgroundImage, imageSize, imagePosition)}>
       {/* Floating particles/stars effect */}
       <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
         {[...Array(20)].map((_, i) => (

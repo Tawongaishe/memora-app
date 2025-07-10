@@ -24,9 +24,14 @@ export const MEMORA_COLORS = {
   
   // Echo Page Styles
   export const echoPageStyles = {
-    container: (gradientColors) => ({
+    container: (gradientColors, backgroundImage = null, imageSize = 'cover', imagePosition = 'center') => ({
       minHeight: '100vh',
-      background: `linear-gradient(135deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 50%, ${gradientColors[2]} 100%)`,
+      backgroundImage: backgroundImage 
+        ? `linear-gradient(135deg, ${gradientColors[0]}CC 0%, ${gradientColors[1]}CC 50%, ${gradientColors[2]}CC 100%), url("${backgroundImage}")`
+        : `linear-gradient(135deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 50%, ${gradientColors[2]} 100%)`,
+      backgroundSize: backgroundImage ? `auto, ${imageSize}` : 'auto',
+      backgroundPosition: backgroundImage ? `0 0, ${imagePosition}` : 'initial',
+      backgroundRepeat: 'no-repeat',
       color: 'white',
       fontFamily: 'Georgia, serif',
       display: 'flex',

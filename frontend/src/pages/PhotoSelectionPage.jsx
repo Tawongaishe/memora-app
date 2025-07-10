@@ -19,6 +19,7 @@ const PhotoSelectionPage = () => {
     culturalContext: "Photographs preserve the essence of cherished moments, capturing the spirit and joy that defined your loved one's journey through life.",
     historicalNote: "In African traditions, visual storytelling through art and symbols has always been central to preserving memories. The Akan people of Ghana use 'Adinkra' symbols to represent concepts and stories, believing that visual representations hold the power to keep memories alive across generations.",
     gradientColors: MEMORA_GRADIENTS.PHOTOS, // Purple to Teal to Brown gradient
+    backgroundImage: 'images/prayer.avif', // add path to image from public,
     progressStep: progress.current - 1
   };
 
@@ -109,6 +110,7 @@ const PhotoSelectionPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />

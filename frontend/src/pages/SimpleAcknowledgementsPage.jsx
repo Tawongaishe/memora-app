@@ -19,7 +19,7 @@ const SimpleAcknowledgmentsPage = () => {
     culturalContext: "The acknowledgement section expresses the family's heartfelt thanks to everyone who offered support, love, and kindness during their time of loss.",
     historicalNote: "In many African traditions, community support during times of grief is considered sacred. The Yoruba concept of 'Àwọn ará' emphasizes how the community becomes family during moments of celebration and mourning.",
     gradientColors: MEMORA_GRADIENTS.ACKNOWLEDGMENTS, // Purple to Teal gradient
-    //  ['#4a154b', '#350d36', '#1a0a1b'], // Purple gradient
+    backgroundImage: "images/africa.jpg", // add path to image from public
     progressStep: progress.current - 1
   };
 
@@ -64,6 +64,7 @@ const SimpleAcknowledgmentsPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />

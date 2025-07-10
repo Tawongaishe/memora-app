@@ -19,6 +19,7 @@ const BurialLocationPage = () => {
     culturalContext: "The final resting place holds deep significance, providing a sacred space where family and friends can visit, remember, and feel connected to their loved one for generations to come.",
     historicalNote: "In many African traditions, the burial site is considered sacred ground where the ancestors continue to watch over and guide the living. The Yoruba concept of 'Ile Orun' speaks to the spiritual connection between the earthly resting place and the realm of the ancestors.",
     gradientColors: MEMORA_GRADIENTS.REVIEW, // Light gradient for solemn reflection
+    backgroundImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop",
     progressStep: progress.current - 1
   };
 
@@ -152,6 +153,7 @@ const BurialLocationPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />

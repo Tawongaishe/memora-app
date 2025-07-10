@@ -20,6 +20,7 @@ const ModularObituaryPage = () => {
     culturalContext: "  ",
     historicalNote: "In West African oral traditions, the 'praise singer' or 'griot' would recount the life stories of the departed, ensuring their deeds and character lived on in community memory. This tradition of honoring through storytelling continues in modern obituaries.",
     gradientColors: MEMORA_GRADIENTS.OBITUARY, // Purple to Brown gradient
+    backgroundImage: "images/image5song.jpg",
     progressStep: progress.current - 1
   };
 
@@ -122,6 +123,7 @@ const ModularObituaryPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />

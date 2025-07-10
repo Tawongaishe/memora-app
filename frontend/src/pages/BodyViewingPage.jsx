@@ -19,6 +19,7 @@ const BodyViewingPage = () => {
     culturalContext: "The decision to have a viewing provides family and friends an opportunity for personal farewell and closure, honoring both personal wishes and cultural traditions.",
     historicalNote: "In many African traditions, the community gathers to honor the deceased through various rituals of farewell. The Akan people believe in 'Adwo' - the peaceful departure ceremony where the community comes together to ensure the spirit transitions peacefully to join the ancestors.",
     gradientColors: MEMORA_GRADIENTS.SERVICE, // Light green to gray gradient
+    backgroundImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     progressStep: progress.current - 1
   };
 
@@ -107,6 +108,7 @@ const BodyViewingPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />

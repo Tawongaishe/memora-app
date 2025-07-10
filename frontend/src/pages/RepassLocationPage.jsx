@@ -19,6 +19,7 @@ const RepassLocationPage = () => {
     culturalContext: "The repass gathering allows family and friends to come together after the service, sharing meals, stories, and comfort as the community continues to honor and remember your loved one.",
     historicalNote: "In West African tradition, the 'Akwasidae' gathering brings the community together to share food and stories, strengthening bonds during times of both celebration and mourning. This communal meal tradition continues in the African diaspora as the repass - a time for healing through fellowship.",
     gradientColors: MEMORA_GRADIENTS.SERVICE, // Light green to gray gradient
+    backgroundImage: "images/lights.webp",
     progressStep: progress.current - 1
   };
 
@@ -145,6 +146,7 @@ const RepassLocationPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />

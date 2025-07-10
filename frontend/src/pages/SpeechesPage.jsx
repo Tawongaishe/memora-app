@@ -19,6 +19,7 @@ const SpeechesPage = () => {
     culturalContext: "Words spoken at a memorial ceremony carry the power to heal, honor, and celebrate a life well-lived. Each voice adds a unique perspective to the tapestry of remembrance.",
     historicalNote: "In West African traditions, the 'praise singer' or 'griot' serves as the community's voice during important ceremonies. They weave together stories, prayers, and reflections that honor the deceased while providing comfort to the bereaved. This tradition of communal speaking continues in modern memorial services.",
     gradientColors: MEMORA_GRADIENTS.EULOGY, // Brown to Purple gradient
+    backgroundImage: "images/choir.jpg",
     progressStep: progress.current - 1
   };
 
@@ -187,6 +188,7 @@ const SpeechesPage = () => {
         culturalContext={echoData.culturalContext}
         historicalNote={echoData.historicalNote}
         gradientColors={echoData.gradientColors}
+        backgroundImage={echoData.backgroundImage}
         progressStep={echoData.progressStep}
         onContinue={handleEchoContinue}
       />
