@@ -35,7 +35,7 @@ const MemoraIntroPage = () => {
   };
 
   return (
-    <div style={echoPageStyles.container(gradientColors, "images/memorial-candles.jpg")}>
+    <div style={echoPageStyles.container(gradientColors, "images/africa.jpg")}>
       {/* Floating particles/stars effect */}
       <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
         {[...Array(20)].map((_, i) => (
