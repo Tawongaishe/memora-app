@@ -1,5 +1,5 @@
 # app/__init__.py
-from flask import Flask
+from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -34,11 +34,10 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
     
-    # Configure CORS
     cors.init_app(app, 
-                  origins=[app.config['FRONTEND_URL']],
-                  allow_headers=['Content-Type', 'Authorization'],
-                  methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
+              origins=['http://localhost:5173'],  # Add both localhost variants
+              allow_headers=['Content-Type', 'Authorization', 'X-Guest-Session'],
+              methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
     
     jwt.init_app(app)
     bcrypt.init_app(app)
@@ -124,3 +123,4 @@ def register_jwt_handlers(app):
     @jwt.unauthorized_loader
     def missing_token_callback(error):
         return {'error': 'Authorization token is required'}, 401
+    

@@ -1,38 +1,93 @@
-// src/pages/SpeechesPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UniversalEchoPage from '../components/common/UniversalEchoPage';
 import UniversalFormPage from '../components/common/UniversalFormPage';
 import { MEMORA_GRADIENTS } from '../components/styles/MemoraStyles';
 import { getNextPage, getProgress } from '../utils/navigation';
+import memoraApi from '../services/memoraApi';
 
 const SpeechesPage = () => {
   const [currentStep, setCurrentStep] = useState('echo');
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const currentPath = '/speeches';
   const progress = getProgress(currentPath);
+
+  useEffect(() => {
+    // Load existing speeches data if available
+    const loadExistingData = async () => {
+      try {
+        setLoading(true);
+        const existingData = await memoraApi.getFormData('speeches');
+        if (existingData.speeches && existingData.speeches.length > 0) {
+          // Convert backend speech array back to frontend form format
+          const frontendData = {};
+          
+          existingData.speeches.forEach(speech => {
+            const type = speech.speechType;
+            const speakerKey = `${type}Speaker`;
+            const relationKey = `${type}Relation`;
+            
+            if (type === 'introduction') {
+              frontendData.introductionSpeaker = speech.speakerName;
+              frontendData.introductionRelation = speech.relationship;
+            } else if (type === 'prayer') {
+              frontendData.prayerSpeaker = speech.speakerName;
+              frontendData.prayerRelation = speech.relationship;
+            } else if (type === 'eulogy') {
+              frontendData.eulogySpeaker = speech.speakerName;
+              frontendData.eulogyRelation = speech.relationship;
+              frontendData.eulogyNotes = speech.notes;
+            } else if (type === 'closing') {
+              frontendData.closingSpeaker = speech.speakerName;
+              frontendData.closingRelation = speech.relationship;
+            } else if (type === 'reflection') {
+              // Handle additional speakers
+              let speakerIndex = 1;
+              while (frontendData[`additionalSpeaker${speakerIndex}`]) {
+                speakerIndex++;
+              }
+              if (speakerIndex <= 3) {
+                frontendData[`additionalSpeaker${speakerIndex}`] = speech.speakerName;
+                frontendData[`additionalRelation${speakerIndex}`] = speech.relationship;
+              }
+            }
+          });
+          
+          setFormData(frontendData);
+        }
+      } catch (err) {
+        console.log('No existing speeches data found');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadExistingData();
+  }, []);
 
   // Echo page data for Ceremony Speeches
   const echoData = {
     title: "Ceremony Speeches",
     culturalContext: "Words spoken at a memorial ceremony carry the power to heal, honor, and celebrate a life well-lived. Each voice adds a unique perspective to the tapestry of remembrance.",
     historicalNote: "In West African traditions, the 'praise singer' or 'griot' serves as the community's voice during important ceremonies. They weave together stories, prayers, and reflections that honor the deceased while providing comfort to the bereaved. This tradition of communal speaking continues in modern memorial services.",
-    gradientColors: MEMORA_GRADIENTS.EULOGY, // Brown to Purple gradient
+    gradientColors: MEMORA_GRADIENTS.EULOGY,
     backgroundImage: "images/choir.jpg",
     progressStep: progress.current - 1
   };
 
-  // Speech ceremony form fields - each speaker in own row
+  // Updated form fields - structured to match backend Speech model
   const formFields = [
-    // INTRODUCTION ROW
+    // INTRODUCTION SECTION
     {
       type: 'text',
       name: 'introductionSpeaker',
-      label: '1. INTRODUCTION - Speaker Name',
+      label: '1. OPENING REMARKS - Speaker Name',
       placeholder: 'Name of person giving opening remarks...',
       required: true,
-      helper: 'Opens the ceremony and welcomes guests.',
+      helper: 'This person opens the ceremony and welcomes guests.',
       fullWidth: true
     },
     {
@@ -44,14 +99,14 @@ const SpeechesPage = () => {
       fullWidth: true
     },
     
-    // PRAYER ROW
+    // PRAYER SECTION
     {
       type: 'text',
       name: 'prayerSpeaker',
-      label: '2. PRAYER - Speaker Name',
+      label: '2. OPENING PRAYER - Speaker Name',
       placeholder: 'Name of person leading the prayer...',
       required: true,
-      helper: 'Offers opening or closing prayer.',
+      helper: 'This person offers the opening prayer or invocation.',
       fullWidth: true
     },
     {
@@ -63,14 +118,14 @@ const SpeechesPage = () => {
       fullWidth: true
     },
     
-    // REFLECTIONS/EULOGY ROW
+    // MAIN EULOGY SECTION
     {
       type: 'text',
       name: 'eulogySpeaker',
-      label: '3. REFLECTIONS/EULOGY - Main Speaker Name',
+      label: '3. MAIN EULOGY - Speaker Name',
       placeholder: 'Name of main eulogy speaker...',
       required: true,
-      helper: 'Shares the primary tribute and life story.',
+      helper: 'This person shares the primary tribute and life story.',
       fullWidth: true
     },
     {
@@ -84,21 +139,23 @@ const SpeechesPage = () => {
     {
       type: 'textarea',
       name: 'eulogyNotes',
-      label: 'Key Points to Include',
-      placeholder: 'Important memories, achievements, or stories to mention...',
+      label: 'Key Points for Eulogy',
+      placeholder: 'Important memories, achievements, or stories to include in the eulogy...',
       required: false,
       rows: 3,
-      fullWidth: true
+      fullWidth: true,
+      helper: 'Special notes or guidance for the eulogy speaker.'
     },
     
-    // ADDITIONAL REFLECTION SPEAKERS
+    // ADDITIONAL SPEAKERS SECTION
     {
       type: 'text',
       name: 'additionalSpeaker1',
-      label: 'Additional Reflection Speaker 1 (Optional)',
+      label: '4. ADDITIONAL REFLECTION - Speaker 1 (Optional)',
       placeholder: 'Name of additional speaker...',
       required: false,
-      fullWidth: true
+      fullWidth: true,
+      helper: 'Additional family member or friend who wants to share memories.'
     },
     {
       type: 'text',
@@ -111,7 +168,7 @@ const SpeechesPage = () => {
     {
       type: 'text',
       name: 'additionalSpeaker2',
-      label: 'Additional Reflection Speaker 2 (Optional)',
+      label: '5. ADDITIONAL REFLECTION - Speaker 2 (Optional)',
       placeholder: 'Name of additional speaker...',
       required: false,
       fullWidth: true
@@ -127,7 +184,7 @@ const SpeechesPage = () => {
     {
       type: 'text',
       name: 'additionalSpeaker3',
-      label: 'Additional Reflection Speaker 3 (Optional)',
+      label: '6. ADDITIONAL REFLECTION - Speaker 3 (Optional)',
       placeholder: 'Name of additional speaker...',
       required: false,
       fullWidth: true
@@ -141,14 +198,14 @@ const SpeechesPage = () => {
       fullWidth: true
     },
     
-    // CLOSING REMARKS ROW
+    // CLOSING SECTION
     {
       type: 'text',
       name: 'closingSpeaker',
-      label: '4. CLOSING REMARKS - Speaker Name',
+      label: '7. CLOSING REMARKS - Speaker Name',
       placeholder: 'Name of person giving closing remarks...',
       required: true,
-      helper: 'Provides final words and ceremony closure.',
+      helper: 'This person provides final words and ceremony closure.',
       fullWidth: true
     },
     {
@@ -169,15 +226,27 @@ const SpeechesPage = () => {
     setCurrentStep('echo');
   };
 
-  const handleFormNext = (data) => {
-    setFormData(data);
-    console.log('Ceremony speeches data:', data);
-    
-    const nextPage = getNextPage(currentPath);
-    if (nextPage) {
-      navigate(nextPage.path);
-    } else {
-      alert('Memorial planning completed!');
+  const handleFormNext = async (data) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Save speeches data to backend
+      const response = await memoraApi.saveFormData('speeches', data);
+      
+      setFormData(data);
+      console.log('Speeches saved successfully:', response);
+      
+      // Navigate to next page
+      const nextPage = getNextPage(currentPath);
+      if (nextPage) {
+        navigate(nextPage.path);
+      } else {
+        alert('Memorial planning completed!');
+      }
+    } catch (err) {
+      setError(`Failed to save speeches: ${err.message}`);
+      setLoading(false);
     }
   };
 
@@ -198,14 +267,16 @@ const SpeechesPage = () => {
   if (currentStep === 'form') {
     return (
       <UniversalFormPage
-        title="Ceremony Speeches"
-        prompt="Assign speakers for each part of the memorial ceremony. Each speech serves a specific purpose in honoring your loved one."
+        title="Ceremony Speeches Assignment"
+        prompt="Assign speakers for each part of the memorial ceremony. Each speech serves a specific purpose in honoring your loved one and providing comfort to attendees."
         formFields={formFields}
         onBack={handleFormBack}
         onNext={handleFormNext}
         progressStep={progress.current}
-        layout="grid"
+        layout="single-column"
         initialData={formData}
+        loading={loading}
+        error={error}
       />
     );
   }

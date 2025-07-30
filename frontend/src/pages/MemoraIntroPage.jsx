@@ -26,12 +26,20 @@ const MemoraIntroPage = () => {
     };
   }, []);
 
-  const handleGetStarted = () => {
-    navigate('/obituary'); // Redirect to obituary page to start planning
+  const handleCreateMemorial = () => {
+    navigate('/start-memorial'); // Navigate to simple memorial ID creation
+  };
+
+  const handleAccessMemorial = () => {
+    navigate('/access-memorial'); // Navigate to access existing memorial
   };
 
   const handleViewChecklist = () => {
     navigate('/funeral-checklist');
+  };
+
+  const handleQuickStart = () => {
+    navigate('/obituary'); // Skip memorial creation for returning users
   };
 
   return (
@@ -170,7 +178,7 @@ const MemoraIntroPage = () => {
       <div style={echoPageStyles.bottomSection}>
         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           <button
-            onClick={handleGetStarted}
+            onClick={handleCreateMemorial}
             style={{
               ...echoPageStyles.continueButton,
               fontSize: '1.25rem',
@@ -179,12 +187,12 @@ const MemoraIntroPage = () => {
             onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
             onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
           >
-            <span>Begin Memorial Planning</span>
+            <span>Create a Memorial</span>
             <ArrowRight size={24} />
           </button>
 
           <button
-            onClick={handleViewChecklist}
+            onClick={handleAccessMemorial}
             style={{
               ...echoPageStyles.continueButton,
               background: 'rgba(255,255,255,0.1)',
@@ -195,8 +203,24 @@ const MemoraIntroPage = () => {
             onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
             onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
           >
-            <span>Someone Has Passed - Now What?</span>
+            <span>Access Existing Memorial</span>
             <ArrowRight size={24} />
+          </button>
+
+          <button
+            onClick={handleViewChecklist}
+            style={{
+              ...echoPageStyles.continueButton,
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              fontSize: '1rem',
+              padding: '1rem 2rem'
+            }}
+            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+          >
+            <span>Someone Has Passed - Now What?</span>
+            <ArrowRight size={20} />
           </button>
         </div>
       </div>
