@@ -12,6 +12,7 @@ import BodyViewingPage from './pages/BodyViewingPage';
 import RepassLocationPage from './pages/RepassLocationPage';
 import BurialLocationPage from './pages/BurialLocationPage';
 import AccessMemorialPage from './pages/AccessMemorialPage';
+import MemorialProgramReviewPage from './pages/ReviewPage';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/repass-location" element={<RepassLocationPage />} />
           <Route path="/photos" element={<PhotoSelectionPage />} />
           <Route path="/burial-location" element={<BurialLocationPage />} />
+          <Route path="/review" element={<MemorialProgramReviewPage />} />
           
           {/* Catch-all route - redirect to home if no match */}
           <Route path="*" element={<Navigate to="/" replace />} />

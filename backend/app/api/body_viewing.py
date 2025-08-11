@@ -131,3 +131,6 @@ def delete_body_viewing(memorial_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': f'Failed to delete body viewing: {str(e)}'}), 500
+    
+  
+    

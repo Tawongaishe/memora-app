@@ -42,7 +42,7 @@ const BodyViewingPage = () => {
 
   // Echo page data for Body Viewing
   const echoData = {
-    title: "Body Viewing",
+    title: "Final Viewing Arrangements",
     culturalContext: "The decision to have a viewing provides family and friends an opportunity for personal farewell and closure, honoring both personal wishes and cultural traditions.",
     historicalNote: "In many African traditions, the community gathers to honor the deceased through various rituals of farewell. The Akan people believe in 'Adwo' - the peaceful departure ceremony where the community comes together to ensure the spirit transitions peacefully to join the ancestors.",
     gradientColors: MEMORA_GRADIENTS.SERVICE,

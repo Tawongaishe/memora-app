@@ -671,7 +671,7 @@ class MemoraApiProvider {
   }
 
   // Generic get method that routes to appropriate service
-  async getFormData(formType, memorialId = null) {
+  async   getFormData(formType, memorialId = null) {
     switch (formType) {
       case 'obituary':
         return await this.getObituary(memorialId);
@@ -687,6 +687,184 @@ class MemoraApiProvider {
         return await this.getBurialLocation(memorialId);
       default:
         throw new Error(`Unsupported form type: ${formType}`);
+    }
+  }
+  
+  // Add these methods to the end of your existing memoraApi.js file
+// Just before the "// Create and export singleton instance" comment
+
+  // ============================================================================
+  // PDF GENERATION METHODS
+  // ============================================================================
+
+  async getMemorialData(memorialId = null) {
+    const id = memorialId || this.getMemorialId();
+    if (!id) throw new Error('No memorial ID available');
+
+    try {
+      console.log('📋 Getting complete memorial data for:', id);
+      const response = await this.makeRequest(`/pdf/${id}/data`);
+      console.log('✅ Memorial data retrieved successfully');
+      return response;
+    } catch (error) {
+      console.error('❌ Failed to get memorial data:', error);
+      throw new Error(`Failed to get memorial data: ${error.message}`);
+    }
+  }
+
+  async generateMemorialPdf(memorialId = null) {
+    const id = memorialId || this.getMemorialId();
+    if (!id) throw new Error('No memorial ID available');
+
+    try {
+      console.log('📄 Generating memorial PDF for:', id);
+      const response = await this.makeRequest(`/pdf/${id}/generate`, {
+        method: 'POST'
+      });
+      console.log('✅ Memorial PDF generation initiated');
+      return response;
+    } catch (error) {
+      console.error('❌ Failed to generate memorial PDF:', error);
+      throw new Error(`Failed to generate memorial PDF: ${error.message}`);
+    }
+  }
+
+  // Helper method to transform backend memorial data to frontend format
+  transformMemorialDataForDisplay(backendData) {
+    if (!backendData || !backendData.memorial_data) {
+      return null;
+    }
+
+    const data = backendData.memorial_data;
+    
+    // Transform basic info from obituary
+    const basicInfo = data.obituary ? {
+      fullName: data.obituary.full_name || '',
+      birthDate: this.formatDateForDisplay(data.obituary.birth_date),
+      deathDate: this.formatDateForDisplay(data.obituary.death_date),
+      birthPlace: data.obituary.birth_place || '',
+      age: this.calculateAge(data.obituary.birth_date, data.obituary.death_date)
+    } : {};
+
+    // Transform photos
+    const photos = {
+      heroImage: data.photos.find(p => p.photo_type === 'hero')?.file_url || null,
+      galleryImages: data.photos.filter(p => p.photo_type === 'gallery').map(p => p.file_url) || []
+    };
+
+    // Transform speeches into organized structure
+    const speeches = this.organizeSpeechesData(data.speeches || []);
+
+    // Transform locations
+    const serviceDetails = data.body_viewing && data.body_viewing.has_viewing ? {
+      serviceName: 'Memorial Service',
+      date: this.formatDateForDisplay(data.body_viewing.viewing_date),
+      time: data.body_viewing.viewing_start_time || '',
+      location: data.body_viewing.viewing_location || '',
+      address: '', // Not stored separately in body viewing
+      officiant: '' // Would need to be stored separately
+    } : {};
+
+    return {
+      basicInfo,
+      photos,
+      serviceDetails,
+      obituary: data.obituary ? {
+        lifeStory: data.obituary.life_story || '',
+        survivedBy: data.obituary.survived_by || '',
+        precededBy: data.obituary.preceded_by || '',
+        tone: data.obituary.tone || ''
+      } : {},
+      speeches,
+      acknowledgements: data.acknowledgements ? {
+        familyMessage: data.acknowledgements.acknowledgment_text || '',
+        specialThanks: '' // Would need additional field
+      } : {},
+      burialLocation: data.burial_location ? {
+        cemeteryName: data.burial_location.cemetery_name || '',
+        address: data.burial_location.burial_address || '',
+        burialDate: this.formatDateForDisplay(data.burial_location.burial_date),
+        burialTime: data.burial_location.burial_time || '',
+        burialNotes: data.burial_location.burial_notes || ''
+      } : {},
+      repassLocation: data.repass_location && data.repass_location.has_repass ? {
+        venueName: data.repass_location.venue_name || '',
+        address: data.repass_location.repass_address || '',
+        hostMessage: data.repass_location.repass_notes || ''
+      } : {}
+    };
+  }
+
+  // Helper method to organize speeches by type
+  organizeSpeechesData(speechesArray) {
+    const organized = {
+      welcomeRemarks: { speaker: '', relation: '' },
+      reflections: [],
+      eulogy: { speaker: '', relation: '' },
+      closingRemarks: { speaker: '', relation: '' }
+    };
+
+    speechesArray.forEach(speech => {
+      const speakerData = {
+        speaker: speech.speaker_name || '',
+        relation: speech.relationship || ''
+      };
+
+      switch (speech.speech_type) {
+        case 'introduction':
+          organized.welcomeRemarks = speakerData;
+          break;
+        case 'eulogy':
+          organized.eulogy = speakerData;
+          break;
+        case 'closing':
+          organized.closingRemarks = speakerData;
+          break;
+        case 'reflection':
+          organized.reflections.push(speakerData);
+          break;
+        default:
+          // Add to reflections as fallback
+          organized.reflections.push(speakerData);
+      }
+    });
+
+    return organized;
+  }
+
+  // Helper method to format dates for display
+  formatDateForDisplay(dateString) {
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return dateString; // Return original if parsing fails
+    }
+  }
+
+  // Helper method to calculate age
+  calculateAge(birthDate, deathDate) {
+    if (!birthDate || !deathDate) return '';
+    
+    try {
+      const birth = new Date(birthDate);
+      const death = new Date(deathDate);
+      const age = death.getFullYear() - birth.getFullYear();
+      const monthDiff = death.getMonth() - birth.getMonth();
+      
+      if (monthDiff < 0 || (monthDiff === 0 && death.getDate() < birth.getDate())) {
+        return `${age - 1} years old`;
+      }
+      
+      return `${age} years old`;
+    } catch (error) {
+      return '';
     }
   }
 }

@@ -140,7 +140,7 @@ const BurialLocationPage = () => {
         // This is the final step - show completion message
         alert('Memorial planning completed! Your memorial program is ready.');
         // Could navigate to a review/summary page here
-        navigate('/');
+        navigate('/review');
       }
     } catch (err) {
       setError(`Failed to save burial location: ${err.message}`);

@@ -11,9 +11,6 @@ const AccessMemorialPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Use hardcoded gradient to avoid import issues
-  const gradientColors = ['#AFA3BF', '#CDC1D9', '#E4F2EE'];
-
   const handleMemorialIdChange = (e) => {
     setMemorialId(e.target.value.trim());
     if (error) setError(null); // Clear error when user starts typing
@@ -76,21 +73,57 @@ const AccessMemorialPage = () => {
       fontFamily: 'Georgia, serif',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between',
-      padding: '2rem',
       position: 'relative',
       overflow: 'hidden'
     }}>
-      <div style={echoPageStyles.overlay}></div>
+      {/* Background Effects */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.08) 0%, transparent 50%)',
+        pointerEvents: 'none'
+      }}></div>
       
-      <div style={echoPageStyles.header}>
-        <div style={echoPageStyles.brandSection}>
-          <h1 style={echoPageStyles.brandTitle}>Memora</h1>
-          <p style={echoPageStyles.brandSubtitle}>Legacy Builder</p>
-          <div style={echoPageStyles.brandLine}></div>
+      {/* Header */}
+      <div style={{
+        position: 'relative',
+        zIndex: 20,
+        padding: '2.5rem',
+        paddingBottom: '0'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
+        }}>
+          <div style={{
+            width: '3px',
+            height: '40px',
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.3))'
+          }}></div>
+          <div>
+            <h1 style={{
+              fontSize: '2.25rem',
+              fontWeight: '300',
+              letterSpacing: '0.1em',
+              color: 'rgba(255,255,255,0.95)',
+              margin: '0 0 0.25rem 0'
+            }}>Memora</h1>
+            <p style={{
+              fontSize: '0.875rem',
+              color: 'rgba(255,255,255,0.7)',
+              fontWeight: '300',
+              letterSpacing: '0.05em',
+              margin: 0
+            }}>Legacy Builder</p>
+          </div>
         </div>
       </div>
 
+      {/* Main Content */}
       <div style={{
         position: 'relative',
         zIndex: 20,
@@ -98,83 +131,77 @@ const AccessMemorialPage = () => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '0 1.5rem',
+        padding: '4rem 2.5rem',
         textAlign: 'center'
       }}>
-        <div style={{
-          marginBottom: '2rem'
-        }}>
+        {/* Title Section */}
+        <div style={{ marginBottom: '4rem' }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1rem',
-            marginBottom: '1.5rem'
+            gap: '2rem',
+            marginBottom: '2.5rem'
           }}>
             <div style={{
-              width: '2rem',
+              width: '3rem',
               height: '1px',
-              background: 'rgba(255,255,255,0.5)'
+              background: 'rgba(255,255,255,0.4)'
             }}></div>
-            <Search size={32} color="rgba(255,255,255,0.8)" />
+            <Search size={40} color="rgba(255,255,255,0.8)" />
             <div style={{
-              width: '2rem',
+              width: '3rem',
               height: '1px',
-              background: 'rgba(255,255,255,0.5)'
+              background: 'rgba(255,255,255,0.4)'
             }}></div>
           </div>
           
           <h2 style={{
-            fontSize: '3rem',
+            fontSize: '3.5rem',
             fontWeight: '300',
-            letterSpacing: '0.05em',
+            letterSpacing: '0.03em',
             color: 'rgba(255,255,255,0.95)',
-            margin: '0 0 1rem 0',
+            margin: '0 0 2rem 0',
             lineHeight: '1.2'
           }}>
             Access Your Memorial
           </h2>
           
           <p style={{
-            fontSize: '1.25rem',
-            lineHeight: '1.6',
+            fontSize: '1.375rem',
+            lineHeight: '1.7',
             color: 'rgba(255,255,255,0.9)',
             fontWeight: '300',
-            marginBottom: '1.5rem',
-            maxWidth: '40rem',
-            margin: '0 auto 1.5rem auto'
+            marginBottom: '2rem',
+            maxWidth: '50rem',
+            margin: '0 auto'
           }}>
             Enter your Memorial ID to continue working on your memorial program.
           </p>
-          
-          <div style={{
-            width: '6rem',
-            height: '1px',
-            background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent)',
-            margin: '0 auto'
-          }}></div>
         </div>
 
+        {/* Access Form */}
         <div style={{
-          background: 'rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(20px)',
-          borderRadius: '1.5rem',
-          padding: '3rem',
-          border: '2px solid rgba(255,255,255,0.3)',
-          boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
-          maxWidth: '40rem',
-          margin: '0 auto 3rem auto'
+          background: 'rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(25px)',
+          borderRadius: '2rem',
+          padding: '4rem',
+          border: '2px solid rgba(255,255,255,0.25)',
+          boxShadow: '0 30px 60px rgba(0,0,0,0.4)',
+          maxWidth: '700px',
+          margin: '0 auto 4rem auto'
         }}>
           <h3 style={{
-            fontSize: '1.5rem',
+            fontSize: '2rem',
             color: 'rgba(255,255,255,0.95)',
-            marginBottom: '1.5rem',
-            fontWeight: '500'
+            marginBottom: '2.5rem',
+            fontWeight: '400',
+            letterSpacing: '0.02em'
           }}>
             Enter Memorial ID
           </h3>
           
-          <div style={{ marginBottom: '2rem' }}>
+          <div style={{ marginBottom: '2.5rem' }}>
             <input
               type="text"
               placeholder="Enter your Memorial ID here..."
@@ -184,40 +211,41 @@ const AccessMemorialPage = () => {
               disabled={loading}
               style={{
                 width: '100%',
-                padding: '1rem 1.5rem',
-                border: error ? '2px solid rgba(239, 68, 68, 0.6)' : '2px solid rgba(255,255,255,0.3)',
-                borderRadius: '0.75rem',
-                fontSize: '1rem',
+                padding: '1.5rem 2rem',
+                border: error ? '3px solid rgba(239, 68, 68, 0.6)' : '3px solid rgba(255,255,255,0.25)',
+                borderRadius: '1rem',
+                fontSize: '1.125rem',
                 fontFamily: 'monospace',
-                background: 'rgba(255,255,255,0.1)',
+                background: 'rgba(255,255,255,0.08)',
                 color: 'white',
                 outline: 'none',
                 transition: 'all 0.3s ease',
-                letterSpacing: '1px',
-                textAlign: 'center'
+                letterSpacing: '2px',
+                textAlign: 'center',
+                boxSizing: 'border-box'
               }}
               onFocus={(e) => {
-                if (!error) e.target.style.borderColor = 'rgba(255,255,255,0.6)';
+                if (!error) e.target.style.borderColor = 'rgba(255,255,255,0.5)';
               }}
               onBlur={(e) => {
-                if (!error) e.target.style.borderColor = 'rgba(255,255,255,0.3)';
+                if (!error) e.target.style.borderColor = 'rgba(255,255,255,0.25)';
               }}
             />
             
             {error && (
               <div style={{
-                marginTop: '1rem',
-                padding: '1rem',
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                borderRadius: '0.5rem',
+                marginTop: '1.5rem',
+                padding: '1.5rem',
+                background: 'rgba(239, 68, 68, 0.12)',
+                border: '2px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: '1rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                color: 'rgba(255,200,200,0.9)'
+                gap: '0.75rem',
+                color: 'rgba(255,200,200,0.95)'
               }}>
-                <AlertCircle size={20} />
-                <span>{error}</span>
+                <AlertCircle size={24} />
+                <span style={{ fontSize: '1.125rem' }}>{error}</span>
               </div>
             )}
           </div>
@@ -227,38 +255,38 @@ const AccessMemorialPage = () => {
             disabled={loading || !memorialId.trim()}
             style={{
               width: '100%',
-              background: (loading || !memorialId.trim()) ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
-              border: `2px solid ${(loading || !memorialId.trim()) ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.4)'}`,
-              borderRadius: '0.75rem',
-              padding: '1rem 2rem',
+              background: (loading || !memorialId.trim()) ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.15)',
+              border: `3px solid ${(loading || !memorialId.trim()) ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.4)'}`,
+              borderRadius: '1rem',
+              padding: '1.5rem 2.5rem',
               color: 'rgba(255,255,255,0.95)',
               cursor: (loading || !memorialId.trim()) ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.75rem',
-              fontSize: '1.125rem',
+              gap: '1rem',
+              fontSize: '1.25rem',
               fontWeight: '500',
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={(e) => {
               if (!loading && memorialId.trim()) {
-                e.target.style.background = 'rgba(255,255,255,0.3)';
+                e.target.style.background = 'rgba(255,255,255,0.25)';
               }
             }}
             onMouseLeave={(e) => {
               if (!loading && memorialId.trim()) {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.background = 'rgba(255,255,255,0.15)';
               }
             }}
           >
             {loading ? (
               <>
                 <div style={{
-                  width: '20px',
-                  height: '20px',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  borderTop: '2px solid rgba(255,255,255,0.8)',
+                  width: '24px',
+                  height: '24px',
+                  border: '3px solid rgba(255,255,255,0.3)',
+                  borderTop: '3px solid rgba(255,255,255,0.8)',
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite'
                 }}></div>
@@ -267,81 +295,87 @@ const AccessMemorialPage = () => {
             ) : (
               <>
                 <span>Access Memorial</span>
-                <ArrowRight size={20} />
+                <ArrowRight size={24} />
               </>
             )}
           </button>
-
-          <div style={{
-            marginTop: '2rem',
-            padding: '1.5rem',
-            background: 'rgba(59, 130, 246, 0.1)',
-            borderRadius: '0.75rem',
-            border: '1px solid rgba(59, 130, 246, 0.3)'
-          }}>
-            <p style={{
-              fontSize: '0.875rem',
-              color: 'rgba(255,255,255,0.9)',
-              margin: 0,
-              lineHeight: '1.5'
-            }}>
-              <strong>Need help?</strong> Your Memorial ID is a long string of letters and numbers that was shown to you when you first created your memorial. Check your saved notes, messages, or browser history.
-            </p>
-          </div>
         </div>
 
+        {/* Help Section */}
         <div style={{
-          background: 'rgba(255,255,255,0.1)',
+          background: 'rgba(59, 130, 246, 0.12)',
           backdropFilter: 'blur(20px)',
-          borderRadius: '1rem',
-          padding: '2rem',
+          borderRadius: '1.5rem',
+          padding: '3rem',
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+          maxWidth: '700px',
+          margin: '0 auto 4rem auto'
+        }}>
+          <p style={{
+            fontSize: '1.125rem',
+            color: 'rgba(255,255,255,0.9)',
+            margin: 0,
+            lineHeight: '1.7'
+          }}>
+            <strong style={{ color: 'rgba(255,255,255,0.95)' }}>Need help?</strong> Your Memorial ID is a long string of letters and numbers that was shown to you when you first created your memorial. Check your saved notes, messages, or browser history.
+          </p>
+        </div>
+
+        {/* Create New Memorial */}
+        <div style={{
+          background: 'rgba(255,255,255,0.08)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '1.5rem',
+          padding: '3rem',
           border: '1px solid rgba(255,255,255,0.2)',
           boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-          maxWidth: '40rem',
+          maxWidth: '700px',
           margin: '0 auto'
         }}>
           <h4 style={{
-            fontSize: '1.25rem',
+            fontSize: '1.75rem',
             color: 'rgba(255,255,255,0.95)',
-            marginBottom: '1rem'
+            marginBottom: '1.5rem',
+            fontWeight: '400'
           }}>
             Don't Have a Memorial ID?
           </h4>
           <p style={{
-            fontSize: '1rem',
-            color: 'rgba(255,255,255,0.8)',
-            lineHeight: '1.6',
-            margin: '0 0 1.5rem 0'
+            fontSize: '1.125rem',
+            color: 'rgba(255,255,255,0.85)',
+            lineHeight: '1.7',
+            margin: '0 0 2rem 0'
           }}>
             If you don't have a Memorial ID yet, you can create a new memorial to get started.
           </p>
           <button
             onClick={() => navigate('/start-memorial')}
             style={{
-              background: 'rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.12)',
               border: '2px solid rgba(255,255,255,0.4)',
-              borderRadius: '0.75rem',
-              padding: '0.75rem 1.5rem',
+              borderRadius: '1rem',
+              padding: '1.25rem 2.5rem',
               color: 'rgba(255,255,255,0.9)',
               cursor: 'pointer',
-              fontSize: '0.875rem',
+              fontSize: '1.125rem',
+              fontWeight: '500',
               transition: 'all 0.3s ease'
             }}
-            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
-            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.12)'}
           >
             Create New Memorial
           </button>
         </div>
       </div>
 
+      {/* Bottom Navigation */}
       <div style={{
         position: 'relative',
         zIndex: 20,
+        padding: '2.5rem',
         display: 'flex',
-        flexDirection: 'column',
-        gap: '1.5rem',
-        alignItems: 'center'
+        justifyContent: 'center'
       }}>
         <button
           onClick={handleBackHome}
@@ -349,14 +383,15 @@ const AccessMemorialPage = () => {
             background: 'rgba(255,255,255,0.1)',
             border: '2px solid rgba(255,255,255,0.4)',
             borderRadius: '2rem',
-            padding: '1rem 2rem',
+            padding: '1.25rem 2.5rem',
             color: 'rgba(255,255,255,0.9)',
             cursor: 'pointer',
-            fontSize: '1rem',
+            fontSize: '1.125rem',
+            fontWeight: '500',
             transition: 'all 0.3s ease',
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem'
+            gap: '0.75rem'
           }}
           onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
           onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}

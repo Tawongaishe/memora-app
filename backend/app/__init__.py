@@ -1,13 +1,15 @@
 # app/__init__.py
-from flask import Flask, app
+from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask import send_from_directory
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 from config import config
 import os
+import base64
 
 # Initialize Flask extensions
 db = SQLAlchemy()
@@ -44,7 +46,7 @@ def create_app(config_name=None):
     mail.init_app(app)
     
     # Create upload directory if it doesn't exist
-    upload_dir = app.config['UPLOAD_FOLDER']
+    upload_dir = app.config.get('UPLOAD_FOLDER', 'uploads')
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
     
@@ -60,6 +62,7 @@ def create_app(config_name=None):
     return app
 
 
+
 def register_blueprints(app):
     """Register all application blueprints"""
     
@@ -73,6 +76,7 @@ def register_blueprints(app):
     from app.api.body_viewing import body_viewing_bp
     from app.api.repass_location import repass_bp
     from app.api.burial_location import burial_bp
+
     
     # Register API blueprints
     app.register_blueprint(auth_bp)
@@ -90,7 +94,39 @@ def register_blueprints(app):
     @app.route('/health')
     def health_check():
         return {'status': 'healthy', 'message': 'Memoras API is running'}, 200
+    
+    @app.route('/uploads/<path:filename>')
+    def uploaded_file(filename):
+        """Serve uploaded files"""
+        upload_folder = app.config['UPLOAD_FOLDER']
+        print(f"UPLOAD_FOLDER: {upload_folder}")
+        print(f"Requested filename: {filename}")
+        print(f"Full path would be: {os.path.join(upload_folder, filename)}")
+        
+        # Check if file exists
+        full_path = os.path.join(upload_folder, filename)
+        print(f"File exists: {os.path.exists(full_path)}")
+        
+        return send_from_directory(upload_folder, filename)
 
+def encode_image_to_base64(file_path):
+    """Convert image file to base64 string"""
+    try:
+        with open(file_path, 'rb') as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+            # Detect file extension for proper mime type
+            ext = os.path.splitext(file_path)[1].lower()
+            if ext in ['.jpg', '.jpeg']:
+                return f"data:image/jpeg;base64,{encoded_string}"
+            elif ext == '.png':
+                return f"data:image/png;base64,{encoded_string}"
+            elif ext == '.gif':
+                return f"data:image/gif;base64,{encoded_string}"
+            else:
+                return f"data:image/png;base64,{encoded_string}"  # default to png
+    except Exception as e:
+        print(f"Error encoding image: {e}")
+        return None
 
 def register_error_handlers(app):
     """Register error handlers"""
