@@ -1,42 +1,45 @@
-# render.yaml - Memora App Backend Deployment
+# render.yaml - Memora App Backend (Updated PostgreSQL Plans)
 services:
   - type: web
     name: memora-backend
     env: python
-    region: oregon  # Same region as your SA_Map
-    plan: starter   # $7/month - 0.5 CPU, 512MB RAM
+    region: oregon
+    plan: starter
+    rootDir: backend
     buildCommand: |
+      cd backend
       pip install --upgrade pip
       pip install -r requirements.txt
       flask db upgrade
-    startCommand: python run.py
+    startCommand: cd backend && python run.py
     envVars:
       - key: FLASK_ENV
         value: production
       - key: RENDER
         value: "true"
       - key: SECRET_KEY
-        generateValue: true  # Render generates secure key
+        generateValue: true
       - key: JWT_SECRET_KEY
-        generateValue: true  # Render generates secure JWT key
+        generateValue: true
       - key: DATABASE_URL
         fromDatabase:
           name: memora-db
           property: connectionString
       - key: UPLOAD_FOLDER
-        value: /opt/render/project/src/uploads
+        value: /opt/render/project/src/backend/uploads
       - key: FRONTEND_URL
-        value: http://localhost:5173  # Update when frontend is deployed
+        value: http://localhost:5173
       - key: MAX_CONTENT_LENGTH
-        value: "16777216"  # 16MB file upload limit
+        value: "16777216"
     disk:
       name: uploads-disk
-      mountPath: /opt/render/project/src/uploads
+      mountPath: /opt/render/project/src/backend/uploads
       sizeGB: 1
 
 databases:
   - name: memora-db
     databaseName: memora
     user: memora_user
-    plan: starter   # $7/month - 1GB storage, 1GB RAM
-    region: oregon  # Same region as web service
+    instanceType: basic-0.5gb  # New flexible plan - ~$7/month + storage
+    region: oregon
+    storage: 5  # 5GB storage ($1.50/month at $0.30/GB)
