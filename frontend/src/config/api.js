@@ -5,7 +5,7 @@ const API_CONFIG = {
   DEVELOPMENT: 'http://localhost:5000/api',
   
   // Production API URL (update this when you deploy)
-  PRODUCTION: 'https://your-production-domain.com/api',
+  PRODUCTION: 'https://memora-backend-kgdg.onrender.com/api',
   
   // Staging API URL (if you have one)
   STAGING: 'https://staging-api.your-domain.com/api'

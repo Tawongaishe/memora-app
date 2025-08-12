@@ -19,12 +19,19 @@ class PhotoUploadSchema(Schema):
     """Schema for photo upload validation"""
     photo_type = fields.Str(required=False, default='gallery')  # profile, gallery
 
+def get_base_url():
+    """Get base URL for file serving"""
+    if os.environ.get('RENDER'):
+        # Production on Render
+        return os.environ.get('RENDER_EXTERNAL_URL', 'https://memora-backend-kgdg.onrender.com')
+    else:
+        # Local development
+        return 'http://localhost:5000'
 
 def allowed_file(filename):
     """Check if file extension is allowed"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 def check_memorial_access(memorial_id):
     """Helper function to check if user can access memorial"""
@@ -46,7 +53,6 @@ def check_memorial_access(memorial_id):
         return None, jsonify({'error': 'Access denied'}), 403
     
     return memorial, None, None
-
 
 @photos_bp.route('/<memorial_id>/photos', methods=['POST'])
 def upload_photos(memorial_id):
@@ -103,8 +109,9 @@ def upload_photos(memorial_id):
                 file_path = os.path.join(memorial_dir, unique_filename)
                 file.save(file_path)
                 
-                # Create file URL (adjust this based on your setup)
-                file_url = f"/uploads/memorial_{memorial_id}/{unique_filename}"
+                # Create file URL with proper base URL
+                base_url = get_base_url()
+                file_url = f"{base_url}/uploads/memorial_{memorial_id}/{unique_filename}"
                 
                 # Create photo record in database
                 photo = Photo(
@@ -134,7 +141,6 @@ def upload_photos(memorial_id):
         db.session.rollback()
         return jsonify({'error': f'Failed to upload photos: {str(e)}'}), 500
 
-
 @photos_bp.route('/<memorial_id>/photos', methods=['GET'])
 def get_photos(memorial_id):
     """Get photos for a memorial"""
@@ -162,7 +168,6 @@ def get_photos(memorial_id):
         
     except Exception as e:
         return jsonify({'error': f'Failed to get photos: {str(e)}'}), 500
-
 
 @photos_bp.route('/<memorial_id>/photos/<photo_id>', methods=['DELETE'])
 def delete_photo(memorial_id, photo_id):
@@ -205,7 +210,6 @@ def delete_photo(memorial_id, photo_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': f'Failed to delete photo: {str(e)}'}), 500
-
 
 @photos_bp.route('/<memorial_id>/photos/reorder', methods=['POST'])
 def reorder_photos(memorial_id):
