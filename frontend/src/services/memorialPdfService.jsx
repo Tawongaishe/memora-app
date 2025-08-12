@@ -545,7 +545,7 @@ const CoverPage = ({ data }) => {
             />
           ) : coverPhoto?.fileUrl ? (
             <Image 
-              src="https://imgur.com/a/1TD3aiD"//https://picsum.photos/300/200"  //{`http://127.0.0.1:5000${coverPhoto.fileUrl}`}
+              src="{`http://127.0.0.1:5000${coverPhoto.fileUrl}`}"
               style={styles.coverPhoto}
             />
           ) : (
