@@ -1,9 +1,9 @@
-# render.yaml - Memora App Backend (Updated PostgreSQL Plans)
+# render.yaml - Memora App Backend (Fixed build command)
 services:
   - type: web
     name: memora-backend
     env: python
-    runtime: python-3.11 
+    runtime: python-3.11  # Force Python 3.11 for better compatibility
     region: oregon
     plan: starter
     rootDir: backend
@@ -11,7 +11,8 @@ services:
       cd backend
       pip install --upgrade pip
       pip install -r requirements.txt
-      flask db upgrade
+      export FLASK_APP=run.py
+      python -c "from app import create_app, db; app = create_app(); app.app_context().push(); db.create_all(); print('Database tables created')"
     startCommand: cd backend && python run.py
     envVars:
       - key: FLASK_ENV
@@ -41,6 +42,5 @@ databases:
   - name: memora-db
     databaseName: memora
     user: memora_user
-    plan: basic-256mb  # New flexible plan - ~$7/month + storage
+    instanceType: Basic-256mb  # $6/month - 256MB RAM, 0.1 CPU
     region: oregon
-  
