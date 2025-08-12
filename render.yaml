@@ -8,13 +8,12 @@ services:
     plan: starter
     rootDir: backend
     buildCommand: |
-      cd backend
       python3.11 --version
       pip install --upgrade pip
       pip install -r requirements.txt
       export FLASK_APP=run.py
       python3.11 -c "from app import create_app, db; app = create_app(); app.app_context().push(); db.create_all(); print('Database tables created')"
-    startCommand: cd backend && python3.11 run.py
+    startCommand: python3.11 run.py
     envVars:
       - key: FLASK_ENV
         value: production
