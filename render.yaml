@@ -3,6 +3,7 @@ services:
   - type: web
     name: memora-backend
     env: python
+    runtime: python-3.11 
     region: oregon
     plan: starter
     rootDir: backend
