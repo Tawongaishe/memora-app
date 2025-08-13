@@ -45,7 +45,7 @@ class Config:
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_USERNAME')
     
     # CORS Configuration
-    FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+    FRONTEND_URL = os.environ.get('FRONTEND_URL', 'https://memora-app-wawu.vercel.app/')
     
     # Rate Limiting
     RATELIMIT_STORAGE_URL = os.environ.get('REDIS_URL', 'memory://')
