@@ -33,6 +33,7 @@ services:
         value: http://localhost:5173
       - key: MAX_CONTENT_LENGTH
         value: "16777216"
+    staticPublishPath: ./static
     disk:
       name: uploads-disk
       mountPath: /opt/render/project/src/backend/uploads

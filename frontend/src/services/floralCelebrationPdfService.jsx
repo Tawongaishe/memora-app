@@ -1,6 +1,13 @@
+
 // src/services/floralCelebrationPdfService.js
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, pdf, Image } from '@react-pdf/renderer';
+
+// Floral image URLs - UPDATE THIS WITH YOUR ACTUAL BACKEND URL
+const FLORAL_IMAGES = {
+  header: "https://memora-backend-kgdg.onrender.com/static/florals/header-border.png", // Replace with your actual URL
+  footer: "https://memora-backend-kgdg.onrender.com/static/florals/footer-border.svg"  // Replace with your actual URL
+};
 
 // Style 4: Floral Celebration - Soft pastels with decorative floral elements
 const styles = StyleSheet.create({
@@ -228,11 +235,11 @@ const FloralCelebrationCoverPage = ({ data }) => {
   
   return (
     <Page size="A4" style={styles.page}>
-      {/* Floral border elements */}
-      <View style={styles.floralBorder} />
-      <View style={styles.floralAccent1} />
-      <View style={styles.floralAccent2} />
-      <View style={styles.floralAccent3} />
+      {/* Floral Header */}
+      <Image 
+        src={FLORAL_IMAGES.header}
+        style={styles.floralHeader}
+      />
       
       {/* Main content */}
       <View style={styles.content}>
@@ -278,41 +285,59 @@ const FloralCelebrationCoverPage = ({ data }) => {
         </View>
       </View>
       
-      {/* Bottom accent */}
-      <View style={styles.bottomAccent} />
+      {/* Floral Footer */}
+      <Image 
+        src={FLORAL_IMAGES.footer}
+        style={styles.floralFooter}
+      />
     </Page>
   );
 };
 
 // Interior page for obituary
 const FloralInteriorPage = ({ data }) => (
-  <Page size="A4" style={{ backgroundColor: '#FEFEFE', padding: 60, color: '#5A5A5A', fontFamily: 'Times-Roman' }}>
-    <Text style={{ fontSize: 24, fontFamily: 'Times-Bold', color: '#C85A5A', textAlign: 'center', marginBottom: 30, letterSpacing: 2 }}>
-      Celebration of Life
-    </Text>
+  <Page size="A4" style={{ backgroundColor: '#FEFEFE', padding: 60, color: '#5A5A5A', fontFamily: 'Times-Roman', position: 'relative' }}>
+    {/* Floral Header */}
+    <Image 
+      src={FLORAL_IMAGES.header}
+      style={{ ...styles.floralHeader, position: 'absolute', top: 0, left: 0 }}
+    />
     
-    {data?.obituary?.fullName && (
-      <Text style={{ fontSize: 18, fontFamily: 'Times-Italic', color: '#8A7968', textAlign: 'center', marginBottom: 25 }}>
-        {data.obituary.fullName}
+    {/* Content with top margin for header */}
+    <View style={{ marginTop: 70 }}>
+      <Text style={{ fontSize: 24, fontFamily: 'Times-Bold', color: '#C85A5A', textAlign: 'center', marginBottom: 30, letterSpacing: 2 }}>
+        Celebration of Life
       </Text>
-    )}
-    
-    <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginBottom: 25 }} />
-    
-    <Text style={{ fontSize: 14, lineHeight: 1.8, color: '#5A5A5A', textAlign: 'justify', marginBottom: 25 }}>
-      {data?.obituary?.lifeStory || 'A beautiful life filled with love, laughter, and cherished memories that will live on in our hearts forever.'}
-    </Text>
-    
-    {data?.obituary?.survivedBy && (
-      <View style={{ marginBottom: 25 }}>
-        <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 10 }}>
-          Lovingly Remembered By
+      
+      {data?.obituary?.fullName && (
+        <Text style={{ fontSize: 18, fontFamily: 'Times-Italic', color: '#8A7968', textAlign: 'center', marginBottom: 25 }}>
+          {data.obituary.fullName}
         </Text>
-        <Text style={{ fontSize: 14, lineHeight: 1.6, color: '#5A5A5A' }}>
-          {data.obituary.survivedBy}
-        </Text>
-      </View>
-    )}
+      )}
+      
+      <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginBottom: 25 }} />
+      
+      <Text style={{ fontSize: 14, lineHeight: 1.8, color: '#5A5A5A', textAlign: 'justify', marginBottom: 25 }}>
+        {data?.obituary?.lifeStory || 'A beautiful life filled with love, laughter, and cherished memories that will live on in our hearts forever.'}
+      </Text>
+      
+      {data?.obituary?.survivedBy && (
+        <View style={{ marginBottom: 25 }}>
+          <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 10 }}>
+            Lovingly Remembered By
+          </Text>
+          <Text style={{ fontSize: 14, lineHeight: 1.6, color: '#5A5A5A' }}>
+            {data.obituary.survivedBy}
+          </Text>
+        </View>
+      )}
+    </View>
+    
+    {/* Floral Footer */}
+    <Image 
+      src={FLORAL_IMAGES.footer}
+      style={styles.floralFooter}
+    />
   </Page>
 );
 
@@ -322,47 +347,62 @@ const FloralOrderOfServicePage = ({ data }) => {
   const memorialDetails = parseMemorialDetails(data?.bodyViewing?.viewingNotes);
   
   return (
-    <Page size="A4" style={{ backgroundColor: '#FEFEFE', padding: 60, color: '#5A5A5A' }}>
-      <Text style={{ fontSize: 24, fontFamily: 'Times-Bold', color: '#C85A5A', textAlign: 'center', marginBottom: 30, letterSpacing: 2 }}>
-        Order of Service
-      </Text>
+    <Page size="A4" style={{ backgroundColor: '#FEFEFE', padding: 60, color: '#5A5A5A', position: 'relative' }}>
+      {/* Floral Header */}
+      <Image 
+        src={FLORAL_IMAGES.header}
+        style={{ ...styles.floralHeader, position: 'absolute', top: 0, left: 0 }}
+      />
       
-      <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginBottom: 30 }} />
-      
-      {speakers.length > 0 && speakers.map((speaker, index) => (
-        <View key={index} style={{ marginBottom: 20, paddingBottom: 15, borderBottom: '1px solid #F0F0F0' }}>
-          <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 5 }}>
-            {speaker.role}
-          </Text>
-          <Text style={{ fontSize: 14, color: '#6B6B6B' }}>
-            {speaker.name}
-          </Text>
-        </View>
-      ))}
-      
-      <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginVertical: 30 }} />
-      
-      {/* Service Information */}
-      <View style={{ padding: 20, backgroundColor: '#F8F5F3', border: '2px solid #E8D5C4', borderRadius: 8 }}>
-        <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 15, textAlign: 'center' }}>
-          Service Information
+      {/* Content with top margin for header */}
+      <View style={{ marginTop: 70 }}>
+        <Text style={{ fontSize: 24, fontFamily: 'Times-Bold', color: '#C85A5A', textAlign: 'center', marginBottom: 30, letterSpacing: 2 }}>
+          Order of Service
         </Text>
-        {memorialDetails.date && (
-          <Text style={{ fontSize: 14, color: '#6B6B6B', marginBottom: 5, textAlign: 'center' }}>
-            {memorialDetails.date}
+        
+        <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginBottom: 30 }} />
+        
+        {speakers.length > 0 && speakers.map((speaker, index) => (
+          <View key={index} style={{ marginBottom: 20, paddingBottom: 15, borderBottom: '1px solid #F0F0F0' }}>
+            <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 5 }}>
+              {speaker.role}
+            </Text>
+            <Text style={{ fontSize: 14, color: '#6B6B6B' }}>
+              {speaker.name}
+            </Text>
+          </View>
+        ))}
+        
+        <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginVertical: 30 }} />
+        
+        {/* Service Information */}
+        <View style={{ padding: 20, backgroundColor: '#F8F5F3', border: '2px solid #E8D5C4', borderRadius: 8 }}>
+          <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 15, textAlign: 'center' }}>
+            Service Information
           </Text>
-        )}
-        {memorialDetails.time && (
-          <Text style={{ fontSize: 14, color: '#6B6B6B', marginBottom: 5, textAlign: 'center' }}>
-            {memorialDetails.time}
-          </Text>
-        )}
-        {memorialDetails.location && (
-          <Text style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center' }}>
-            {memorialDetails.location}
-          </Text>
-        )}
+          {memorialDetails.date && (
+            <Text style={{ fontSize: 14, color: '#6B6B6B', marginBottom: 5, textAlign: 'center' }}>
+              {memorialDetails.date}
+            </Text>
+          )}
+          {memorialDetails.time && (
+            <Text style={{ fontSize: 14, color: '#6B6B6B', marginBottom: 5, textAlign: 'center' }}>
+              {memorialDetails.time}
+            </Text>
+          )}
+          {memorialDetails.location && (
+            <Text style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center' }}>
+              {memorialDetails.location}
+            </Text>
+          )}
+        </View>
       </View>
+      
+      {/* Floral Footer */}
+      <Image 
+        src={FLORAL_IMAGES.footer}
+        style={styles.floralFooter}
+      />
     </Page>
   );
 };
