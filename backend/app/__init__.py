@@ -10,6 +10,7 @@ from flask_mail import Mail
 from config import config
 import os
 import base64
+import jsonify
 
 # Initialize Flask extensions
 db = SQLAlchemy()
@@ -112,9 +113,8 @@ def register_blueprints(app):
     
 
     # Alternative route if you want to keep it under /api
-    @app.route('/api/florals/<filename>')
-    def serve_floral_image_api(filename):
-        """API route for floral images"""
+    @app.route('/florals/<filename>')
+    def serve_floral_image(filename):
         florals_dir = os.path.join(app.static_folder, 'florals')
         return send_from_directory(florals_dir, filename)
     

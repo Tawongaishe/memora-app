@@ -5,7 +5,7 @@ import { Document, Page, Text, View, StyleSheet, pdf, Image } from '@react-pdf/r
 // Simple image URLs using direct Flask routes (like photos API)
 const FLORAL_IMAGES = {
   header: "https://memora-backend-kgdg.onrender.com/florals/header-border.png",
-  footer: "https://memora-backend-kgdg.onrender.com/florals/footer-border.svg"
+  footer: "https://memora-backend-kgdg.onrender.com/florals/footer-border.png"
 };
 
 // Style 4: Floral Celebration - Soft pastels with decorative floral elements
@@ -239,12 +239,36 @@ const getSpeakerInfo = (speeches) => {
   }));
 };
 
-// Simple Floral Header Component
+// Safe Image Component that handles @react-pdf/renderer quirks
+const SafeImage = ({ src, style, fallbackComponent }) => {
+  // @react-pdf/renderer works better with direct Image components
+  // Let's try the image first, fallback if it fails
+  try {
+    return (
+      <Image 
+        src={src}
+        style={style}
+        // These props help with @react-pdf/renderer compatibility
+        cache={false}
+      />
+    );
+  } catch (error) {
+    console.warn('Image failed to load:', src, error);
+    return fallbackComponent || null;
+  }
+};
+
+// Floral Header Component using base64 images
 const FloralHeader = () => {
   try {
-    return <Image src={FLORAL_IMAGES.header} style={styles.floralHeader} />;
+    return (
+      <Image 
+        src={FLORAL_DECORATIONS_BASE64.header}
+        style={styles.floralHeader}
+      />
+    );
   } catch (error) {
-    // Fallback to CSS decorations if image fails
+    // Fallback to CSS if even base64 fails
     return (
       <View>
         <View style={styles.floralBorderFallback} />
@@ -256,12 +280,17 @@ const FloralHeader = () => {
   }
 };
 
-// Simple Floral Footer Component
+// Floral Footer Component using base64 images
 const FloralFooter = () => {
   try {
-    return <Image src={FLORAL_IMAGES.footer} style={styles.floralFooter} />;
+    return (
+      <Image 
+        src={FLORAL_DECORATIONS_BASE64.footer}
+        style={styles.floralFooter}
+      />
+    );
   } catch (error) {
-    // Fallback to CSS decoration if image fails
+    // Fallback to CSS if even base64 fails
     return <View style={styles.bottomAccent} />;
   }
 };

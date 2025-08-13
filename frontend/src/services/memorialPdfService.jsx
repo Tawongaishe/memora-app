@@ -564,12 +564,14 @@ const CoverPage = ({ data }) => {
         
         {/* Photo - try to load actual image */}
         <View style={styles.photoContainer}>
-          {coverPhoto?.base64_url ? (
+          {/* {coverPhoto?.base64_url ? (
             <Image 
               src={coverPhoto.base64_url}
               style={styles.coverPhoto}
             />
-          ) : coverPhoto?.fileUrl ? (
+          ) :  */}
+          {
+          coverPhoto?.fileUrl ? (
             <Image 
               src={coverPhoto.fileUrl}
               style={styles.coverPhoto}
