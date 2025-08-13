@@ -37,9 +37,10 @@ def create_app(config_name=None):
     migrate.init_app(app, db)
     
     cors.init_app(app, 
-              origins=['http://localhost:5173'],  # Add both localhost variants
+              origins=['http://localhost:5173', 'https://memora-app-wawu.vercel.app/'],  # Add both localhost variants
               allow_headers=['Content-Type', 'Authorization', 'X-Guest-Session'],
               methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
+    
     
     jwt.init_app(app)
     bcrypt.init_app(app)
