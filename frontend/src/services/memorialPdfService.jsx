@@ -25,17 +25,16 @@ const styles = StyleSheet.create({
   },
   
   memoryText: {
-    fontSize: 28,
+    fontSize: 48,
     fontFamily: 'Times-Bold',
     color: '#D1A27A',
     position: 'absolute',
-    left: 15,
-    top: 180,
-    width: 120,
+    left: 20,
+    top: 100,
+    width: 100,
     textAlign: 'center',
-    transform: 'rotate(-90deg)',
-    transformOrigin: 'center',
-    letterSpacing: 6
+    letterSpacing: 12,
+    lineHeight: 1.4
   },
   
   coverContent: {
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
   },
   
   coverName: {
-    fontSize: 42,
+    fontSize: 36,
     fontFamily: 'Times-Bold',
     color: '#F3F4F6',
     textAlign: 'center',
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
   
   photoContainer: {
     width: 300,
-    height: 200,
+    height: 300,
     backgroundColor: '#374151',
     marginBottom: 40,
     display: 'flex',
@@ -87,8 +86,8 @@ const styles = StyleSheet.create({
   },
   
   coverPhoto: {
-    width: 300,
-    height: 200,
+    width: '100%',
+    height: '100%',
     objectFit: 'cover'
   },
   
@@ -331,8 +330,8 @@ const styles = StyleSheet.create({
   },
   
   galleryPhoto: {
-    width: 220,
-    height: 160,
+    width: 200,
+    height: 200,
     objectFit: 'cover',
     marginBottom: 20,
     borderRadius: 4
@@ -429,6 +428,28 @@ const formatDate = (dateString) => {
   }
 };
 
+// Helper function to parse memorial details from viewingNotes
+const parseMemorialDetails = (viewingNotes) => {
+  if (!viewingNotes) return { date: '', time: '', location: '' };
+  
+  const lines = viewingNotes.split('\n');
+  let date = '';
+  let time = '';
+  let location = '';
+  
+  lines.forEach(line => {
+    if (line.includes('Memorial Service Date:')) {
+      date = line.replace('Memorial Service Date:', '').trim();
+    } else if (line.includes('Memorial Service Time:')) {
+      time = line.replace('Memorial Service Time:', '').trim();
+    } else if (line.includes('Memorial Service Location:')) {
+      location = line.replace('Memorial Service Location:', '').trim();
+    }
+  });
+  
+  return { date, time, location };
+};
+
 // Helper function to create a proper obituary paragraph
 const createObituaryParagraph = (data) => {
   if (!data?.obituary) return '';
@@ -512,15 +533,20 @@ const getSpeakerInfo = (speeches) => {
   }));
 };
 
-// Cover Page Component
+// Cover Page Component - now uses memorial details from bodyViewing.viewingNotes
 const CoverPage = ({ data }) => {
   // Get the first photo for the cover
   const coverPhoto = data?.photos && data.photos.length > 0 ? data.photos[0] : null;
   
+  // Parse memorial details from bodyViewing.viewingNotes
+  const memorialDetails = parseMemorialDetails(data?.bodyViewing?.viewingNotes);
+  
   return (
     <Page size="A4" style={styles.coverPage}>
-      {/* Large "MEMORY" text on the side - fixed */}
-      <Text style={styles.memoryText}>MEMORY</Text>
+      {/* Large "MEMORY" text on the side - stacked vertically */}
+      <Text style={styles.memoryText}>
+        M{'\n'}E{'\n'}M{'\n'}O{'\n'}R{'\n'}Y
+      </Text>
       
       {/* Main content */}
       <View style={styles.coverContent}>
@@ -545,7 +571,7 @@ const CoverPage = ({ data }) => {
             />
           ) : coverPhoto?.fileUrl ? (
             <Image 
-              src="{`http://127.0.0.1:5000${coverPhoto.fileUrl}`}"
+              src={coverPhoto.fileUrl}
               style={styles.coverPhoto}
             />
           ) : (
@@ -553,20 +579,17 @@ const CoverPage = ({ data }) => {
           )}
         </View>
         
-        {/* Service details */}
+        {/* Memorial Service details - now uses memorial details from viewingNotes */}
         <View style={styles.serviceDetails}>
           <Text style={styles.serviceDate}>Memorial Service</Text>
-          {data?.burial?.burialDate && (
-            <Text style={styles.serviceTime}>{formatDate(data.burial.burialDate)}</Text>
+          {memorialDetails.date && (
+            <Text style={styles.serviceTime}>{memorialDetails.date}</Text>
           )}
-          {data?.burial?.burialTime && (
-            <Text style={styles.serviceTime}>at {data.burial.burialTime}</Text>
+          {memorialDetails.time && (
+            <Text style={styles.serviceTime}>at {memorialDetails.time}</Text>
           )}
-          {data?.burial?.cemeteryName && (
-            <Text style={styles.serviceLocation}>{data.burial.cemeteryName}</Text>
-          )}
-          {data?.burial?.burialAddress && (
-            <Text style={styles.serviceLocation}>{data.burial.burialAddress}</Text>
+          {memorialDetails.location && (
+            <Text style={styles.serviceLocation}>{memorialDetails.location}</Text>
           )}
         </View>
       </View>
@@ -637,9 +660,10 @@ const ObituaryPage = ({ data }) => {
   );
 };
 
-// Order of Service Page Component
+// Order of Service Page Component - updated to show memorial details properly
 const OrderOfServicePage = ({ data }) => {
   const speakers = getSpeakerInfo(data?.speeches);
+  const memorialDetails = parseMemorialDetails(data?.bodyViewing?.viewingNotes);
   
   return (
     <Page size="A4" style={styles.orderPage}>
@@ -663,16 +687,30 @@ const OrderOfServicePage = ({ data }) => {
         ))}
         
         {/* Service Information */}
-        {(data?.bodyViewing || data?.burial || data?.repass) && (
+        {(memorialDetails.date || memorialDetails.time || memorialDetails.location || data?.bodyViewing || data?.burial || data?.repass) && (
           <>
             <View style={styles.separator} />
             
-            {data?.bodyViewing && data.bodyViewing.hasViewing !== false && (
+            {/* Memorial Service Info from memorial details */}
+            {(memorialDetails.date || memorialDetails.time || memorialDetails.location) && (
+              <View style={styles.serviceInfoSection}>
+                <Text style={styles.serviceInfoTitle}>Memorial Service</Text>
+                {memorialDetails.date && (
+                  <Text style={styles.serviceInfoText}>Date: {memorialDetails.date}</Text>
+                )}
+                {memorialDetails.time && (
+                  <Text style={styles.serviceInfoText}>Time: {memorialDetails.time}</Text>
+                )}
+                {memorialDetails.location && (
+                  <Text style={styles.serviceInfoText}>Location: {memorialDetails.location}</Text>
+                )}
+              </View>
+            )}
+            
+            {data?.bodyViewing && data.bodyViewing.hasViewing !== false && data.bodyViewing.viewingLocation && (
               <View style={styles.serviceInfoSection}>
                 <Text style={styles.serviceInfoTitle}>Viewing</Text>
-                {data.bodyViewing.viewingLocation && (
-                  <Text style={styles.serviceInfoText}>Location: {data.bodyViewing.viewingLocation}</Text>
-                )}
+                <Text style={styles.serviceInfoText}>Location: {data.bodyViewing.viewingLocation}</Text>
                 {data.bodyViewing.viewingDate && (
                   <Text style={styles.serviceInfoText}>Date: {formatDate(data.bodyViewing.viewingDate)}</Text>
                 )}
@@ -740,7 +778,7 @@ const PhotoGalleryPage = ({ data }) => {
             photo?.fileUrl ? (
               <Image 
                 key={photo.id || index}
-                src={`http://127.0.0.1:5000${photo.fileUrl}`}
+                src={photo.fileUrl}
                 style={styles.galleryPhoto}
               />
             ) : (
@@ -757,12 +795,6 @@ const PhotoGalleryPage = ({ data }) => {
       </View>
     </Page>
   );
-};
-
-// Helper function for service order
-const getServiceOrder = (index) => {
-  const orders = ['Welcome & Introduction', 'Prayer', 'Eulogy', 'Closing Remarks'];
-  return orders[index] || `Speaker ${index + 1}`;
 };
 
 // Quote/Memorial Page Component

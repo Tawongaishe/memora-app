@@ -8,6 +8,11 @@ export const PAGE_SEQUENCE = [
     description: 'Life story and details'
   },
   {
+    path: '/memorial-details',
+    title: 'Memorial Details',
+    description: 'Service information and details'
+  },
+  {
     path: '/body-viewing',
     title: 'Body Viewing',
     description: 'Viewing arrangements'

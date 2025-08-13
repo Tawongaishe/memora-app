@@ -50,7 +50,7 @@ const BodyViewingPage = () => {
     progressStep: progress.current - 1
   };
 
-  // Updated body viewing form fields to match backend BodyViewing model
+  // Body viewing form fields - focused only on viewing arrangements
   const formFields = [
     {
       type: 'select',
@@ -98,16 +98,7 @@ const BodyViewingPage = () => {
       fullWidth: true,
       helper: 'Where will the viewing take place?'
     },
-    {
-      type: 'textarea',
-      name: 'viewingNotes',
-      label: 'Special Instructions for Viewing',
-      placeholder: 'Any special requests, family-only hours, cultural considerations, or other important details...',
-      required: false,
-      fullWidth: true,
-      rows: 3,
-      helper: 'Include any specific guidance for the viewing period.'
-    }
+
   ];
 
   const handleEchoContinue = () => {

@@ -13,6 +13,7 @@ import RepassLocationPage from './pages/RepassLocationPage';
 import BurialLocationPage from './pages/BurialLocationPage';
 import AccessMemorialPage from './pages/AccessMemorialPage';
 import MemorialProgramReviewPage from './pages/ReviewPage';
+import MemorialDetailsPage from './pages/MemorialDetailsPage';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           
           {/* Individual passage routes */}
           <Route path="/obituary" element={<ModularObituaryPage />} />
+          <Route path="/memorial-details" element={<MemorialDetailsPage />} />
           <Route path="/body-viewing" element={<BodyViewingPage />} />
           <Route path="/speeches" element={<SpeechesPage />} />
           <Route path="/acknowledgements" element={<SimpleAcknowledgmentsPage />} />
