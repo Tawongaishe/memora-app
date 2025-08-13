@@ -12,32 +12,25 @@ import {
   Spin,
   Alert,
   Descriptions,
-  Image,
   Empty,
-  message,
-  Modal,
-  Radio
+  message
 } from 'antd';
 import {
   Download,
   FileText,
-  Check,
   Edit3,
   Share2,
   Heart,
   Camera,
   Users,
   MapPin,
-  Loader2,
-  AlertCircle,
-  Palette
+  Loader2
 } from 'lucide-react';
 import memoraApi from '../services/memoraApi';
 import { generateMemorialPDF } from '../services/memorialPdfService';
-import { generateClassicPortraitPDF } from '../services/classicPortraitPdfService';
-import { generateModernProgramPDF } from '../services/modernProgramPdfService';
-import { generateTraditionalElegantPDF } from '../services/traditionalElegantPdfService';
 import { generateFloralCelebrationPDF } from '../services/floralCelebrationPdfService';
+import { generateBlackGoldElegancePDF } from '../services/elegancePdfService';
+import PDFStyleSelector from '../components/pdfStyleSelector';
 
 const { Title, Paragraph, Text } = Typography;
 const { Panel } = Collapse;
@@ -50,44 +43,20 @@ const MemorialProgramReviewPage = () => {
   const [programGenerated, setProgramGenerated] = useState(false);
   const [memorialData, setMemorialData] = useState(null);
   const [error, setError] = useState(null);
-  const [showStyleSelector, setShowStyleSelector] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState('classic-portrait');
+  const [selectedStyle, setSelectedStyle] = useState('classic-memorial');
 
-  // PDF Style options
-  const pdfStyles = [
-    {
-      id: 'classic-portrait',
-      name: 'Classic Portrait',
-      description: 'Full photo background with elegant text overlay',
-      preview: '/api/placeholder/300/400', // You'll replace with actual preview images
-      generator: generateClassicPortraitPDF,
-      features: ['Full photo background', 'Elegant script typography', 'Dark overlay design', 'Intimate feel']
-    },
-    {
-      id: 'modern-program',
-      name: 'Modern Program',
-      description: 'Clean, structured service program layout',
-      preview: '/api/placeholder/300/400',
-      generator: generateModernProgramPDF,
-      features: ['Clean text layout', 'Structured program', 'Contemporary design', 'Service-focused']
-    },
-    {
-      id: 'traditional-elegant',
-      name: 'Traditional Elegant',
-      description: 'Classic white background with formal typography',
-      preview: '/api/placeholder/300/400',
-      generator: generateTraditionalElegantPDF,
-      features: ['Clean white background', 'Formal typography', 'Centered photo', 'Timeless design']
-    },
-    {
-      id: 'floral-celebration',
-      name: 'Floral Celebration',
-      description: 'Soft pastels with decorative floral elements',
-      preview: '/api/placeholder/300/400',
-      generator: generateFloralCelebrationPDF,
-      features: ['Soft pastel colors', 'Floral decorations', 'Celebratory feel', 'Feminine elegance']
-    }
-  ];
+  // PDF Style generators mapping
+  const styleGenerators = {
+    'classic-memorial': generateMemorialPDF,
+    'floral-celebration': generateFloralCelebrationPDF,
+    'black-gold-elegance': generateBlackGoldElegancePDF
+  };
+
+  const styleNames = {
+    'classic-memorial': 'Classic Memorial',
+    'floral-celebration': 'Floral Celebration',
+    'black-gold-elegance': 'Black & Gold Elegance'
+  };
 
   // Load memorial data on component mount
   useEffect(() => {
@@ -150,7 +119,8 @@ const MemorialProgramReviewPage = () => {
       photos: '/photos',
       burial: '/burial-location',
       acknowledgments: '/acknowledgements',
-      repass: '/repass-location'
+      repass: '/repass-location',
+      bodyViewing: '/body-viewing'
     };
     
     if (routeMap[section]) {
@@ -158,42 +128,23 @@ const MemorialProgramReviewPage = () => {
     }
   };
 
-  const handleStyleSelection = () => {
-    setShowStyleSelector(true);
-  };
-
-  const generatePDF = async (styleId = null) => {
+  const generatePDF = async () => {
     setIsGenerating(true);
-    setShowStyleSelector(false);
     
     try {
-      console.log('🔄 Generating PDF with style:', styleId || 'default');
+      console.log('🔄 Generating PDF with style:', selectedStyle);
       
-      let result;
+      // Get the generator function for the selected style
+      const generator = styleGenerators[selectedStyle];
       
-      if (styleId) {
-        // Use selected style generator
-        const selectedStyleConfig = pdfStyles.find(style => style.id === styleId);
-        
-        if (!selectedStyleConfig) {
-          throw new Error('Selected PDF style not found');
-        }
-        
-        result = await selectedStyleConfig.generator(memorialData);
-        
-        if (result.success) {
-          message.success(`${selectedStyleConfig.name} memorial program generated successfully!`);
-        }
-      } else {
-        // Use default memorialPdfService
-        result = await generateMemorialPDF(memorialData);
-        
-        if (result.success) {
-          message.success('Memorial program generated successfully!');
-        }
+      if (!generator) {
+        throw new Error('Selected PDF style not found');
       }
       
+      const result = await generator(memorialData);
+      
       if (result.success) {
+        message.success(`${styleNames[selectedStyle]} memorial program generated successfully!`);
         setProgramGenerated(true);
       } else {
         throw new Error(result.error || 'PDF generation failed');
@@ -303,174 +254,10 @@ const MemorialProgramReviewPage = () => {
               >
                 Share
               </Button>
-              <Button
-                icon={<Palette size={16} />}
-                onClick={handleStyleSelection}
-                disabled={isGenerating}
-              >
-                Alternative Styles
-              </Button>
-              <Button
-                type="primary"
-                icon={isGenerating ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
-                onClick={() => generatePDF()}
-                loading={isGenerating}
-              >
-                {isGenerating ? 'Generating...' : 'Generate PDF'}
-              </Button>
             </Space>
           </Col>
         </Row>
       </Card>
-
-      {/* PDF Style Selector Modal */}
-      <Modal
-        title="Choose Alternative Memorial Program Style"
-        open={showStyleSelector}
-        onCancel={() => setShowStyleSelector(false)}
-        width={1000}
-        footer={[
-          <Button key="cancel" onClick={() => setShowStyleSelector(false)}>
-            Cancel
-          </Button>,
-          <Button 
-            key="generate" 
-            type="primary" 
-            onClick={() => generatePDF(selectedStyle)}
-            loading={isGenerating}
-          >
-            Generate {pdfStyles.find(s => s.id === selectedStyle)?.name} Style
-          </Button>
-        ]}
-      >
-        <Radio.Group 
-          value={selectedStyle} 
-          onChange={(e) => setSelectedStyle(e.target.value)}
-          style={{ width: '100%' }}
-        >
-          <Row gutter={[16, 16]}>
-            {pdfStyles.map((style) => (
-              <Col key={style.id} xs={24} sm={12} lg={6}>
-                <Card
-                  hoverable
-                  size="small"
-                  style={{
-                    border: selectedStyle === style.id ? '2px solid #1890ff' : '1px solid #d9d9d9',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => setSelectedStyle(style.id)}
-                  cover={
-                    <div style={{ 
-                      height: 200, 
-                      backgroundColor: '#f5f5f5',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative'
-                    }}>
-                      {style.id === 'classic-portrait' && (
-                        <div style={{
-                          width: '100%',
-                          height: '100%',
-                          background: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23333\'/%3E%3C/svg%3E")',
-                          color: 'white',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          fontSize: '12px'
-                        }}>
-                          <div style={{ fontStyle: 'italic', marginBottom: '8px' }}>In Loving Memory...</div>
-                          <div style={{ fontWeight: 'bold', fontSize: '16px' }}>NAME</div>
-                        </div>
-                      )}
-                      {style.id === 'modern-program' && (
-                        <div style={{
-                          width: '100%',
-                          height: '100%',
-                          backgroundColor: '#2D3748',
-                          color: 'white',
-                          padding: '16px',
-                          display: 'flex',
-                          flexDirection: 'column'
-                        }}>
-                          <div style={{ fontStyle: 'italic', fontSize: '18px', marginBottom: '8px' }}>Worship Service</div>
-                          <div style={{ fontSize: '10px', letterSpacing: '2px' }}>PROGRAM</div>
-                          <div style={{ marginTop: '16px', fontSize: '10px' }}>
-                            <div style={{ marginBottom: '4px', display: 'flex', justifyContent: 'space-between' }}>
-                              <span>Scripture Reading</span><span>Minister</span>
-                            </div>
-                            <div style={{ marginBottom: '4px', display: 'flex', justifyContent: 'space-between' }}>
-                              <span>Prayer</span><span>Elder</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {style.id === 'traditional-elegant' && (
-                        <div style={{
-                          width: '100%',
-                          height: '100%',
-                          backgroundColor: 'white',
-                          color: 'black',
-                          padding: '16px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          textAlign: 'center'
-                        }}>
-                          <div style={{ fontStyle: 'italic', fontSize: '14px', marginBottom: '8px' }}>In Loving Memory</div>
-                          <div style={{ width: '60px', height: '60px', backgroundColor: '#f0f0f0', marginBottom: '8px', border: '1px solid #ccc' }}></div>
-                          <div style={{ fontWeight: 'bold', fontSize: '12px', marginBottom: '4px' }}>Full Name</div>
-                          <div style={{ fontSize: '10px', color: '#666' }}>Date - Date</div>
-                        </div>
-                      )}
-                      {style.id === 'floral-celebration' && (
-                        <div style={{
-                          width: '100%',
-                          height: '100%',
-                          backgroundColor: '#FEFEFE',
-                          color: '#5A5A5A',
-                          padding: '16px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          textAlign: 'center',
-                          position: 'relative'
-                        }}>
-                          <div style={{ position: 'absolute', top: '8px', left: '8px', width: '20px', height: '20px', backgroundColor: '#F4C2C2', borderRadius: '50%', opacity: 0.6 }}></div>
-                          <div style={{ position: 'absolute', top: '8px', right: '8px', width: '15px', height: '15px', backgroundColor: '#D4C5B9', borderRadius: '50%', opacity: 0.5 }}></div>
-                          <div style={{ fontSize: '10px', marginBottom: '4px', color: '#8A7968', letterSpacing: '1px' }}>IN LOVING, LASTING MEMORY</div>
-                          <div style={{ fontSize: '8px', marginBottom: '8px', color: '#8A7968' }}>of</div>
-                          <div style={{ fontStyle: 'italic', fontSize: '14px', color: '#C85A5A', marginBottom: '8px' }}>Name</div>
-                          <div style={{ width: '50px', height: '40px', backgroundColor: '#F8F5F3', border: '2px solid #E8D5C4', borderRadius: '4px' }}></div>
-                        </div>
-                      )}
-                    </div>
-                  }
-                >
-                  <div style={{ padding: '8px 0' }}>
-                    <Radio value={style.id} style={{ marginBottom: '8px' }}>
-                      <Text strong>{style.name}</Text>
-                    </Radio>
-                    <Paragraph style={{ margin: 0, fontSize: '12px' }}>
-                      {style.description}
-                    </Paragraph>
-                    <div style={{ marginTop: '8px' }}>
-                      {style.features.map((feature, index) => (
-                        <Tag key={index} size="small" style={{ marginBottom: '4px' }}>
-                          {feature}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </Radio.Group>
-      </Modal>
 
       {/* Memorial Overview */}
       {(memorialData?.obituary || memorialData?.memorial) && (
@@ -491,9 +278,8 @@ const MemorialProgramReviewPage = () => {
         </Card>
       )}
 
-      {/* Content Sections - keeping all the existing collapse panels */}
-      <Collapse accordion>
-        {/* All your existing Panel components go here - I'll keep them as they are */}
+      {/* Content Sections */}
+      <Collapse accordion style={{ marginBottom: '24px' }}>
         {/* Obituary Section */}
         <Panel
           header={
@@ -543,6 +329,84 @@ const MemorialProgramReviewPage = () => {
           )}
         </Panel>
 
+        {/* Photos Section */}
+        <Panel
+          header={
+            <Space>
+              <Camera size={20} />
+              <Text strong>Photo Gallery</Text>
+              <Tag color={hasData(memorialData?.photos) ? 'success' : 'error'}>
+                {hasData(memorialData?.photos) ? 'Complete' : 'Missing'}
+              </Tag>
+            </Space>
+          }
+          key="photos"
+          extra={
+            <Button
+              size="small"
+              icon={<Edit3 size={14} />}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit('photos');
+              }}
+            >
+              Edit
+            </Button>
+          }
+        >
+          {memorialData?.photos && memorialData.photos.length > 0 ? (
+            <Row gutter={[16, 16]}>
+              {memorialData.photos.map((photo, index) => (
+                <Col key={photo.id} xs={12} sm={8} md={6}>
+                  <div style={{ 
+                    aspectRatio: '1',
+                    backgroundColor: '#f5f5f5',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: '1px solid #d9d9d9'
+                  }}>
+                    {photo.fileUrl ? (
+                      <img 
+                        src={photo.fileUrl} 
+                        alt={photo.filename}
+                        style={{ 
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'cover' 
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div style={{ 
+                      width: '100%',
+                      height: '100%',
+                      display: photo.fileUrl ? 'none' : 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Camera size={24} color="#bfbfbf" />
+                      <Text type="secondary" style={{ fontSize: '12px', marginTop: '8px' }}>
+                        {photo.filename || `Photo ${index + 1}`}
+                      </Text>
+                    </div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description="No photos selected. Click Edit to add photos."
+            />
+          )}
+        </Panel>
+
+        {/* Add other sections as needed - speeches, burial, acknowledgments, etc. */}
+        
         {/* Body Viewing Section */}
         <Panel
           header={
@@ -561,7 +425,7 @@ const MemorialProgramReviewPage = () => {
               icon={<Edit3 size={14} />}
               onClick={(e) => {
                 e.stopPropagation();
-                handleEdit('body-viewing');
+                handleEdit('bodyViewing');
               }}
             >
               Edit
@@ -652,82 +516,6 @@ const MemorialProgramReviewPage = () => {
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description="No speech assignments available. Click Edit to add speakers."
-            />
-          )}
-        </Panel>
-
-        {/* Photos Section */}
-        <Panel
-          header={
-            <Space>
-              <Camera size={20} />
-              <Text strong>Photo Gallery</Text>
-              <Tag color={hasData(memorialData?.photos) ? 'success' : 'error'}>
-                {hasData(memorialData?.photos) ? 'Complete' : 'Missing'}
-              </Tag>
-            </Space>
-          }
-          key="photos"
-          extra={
-            <Button
-              size="small"
-              icon={<Edit3 size={14} />}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEdit('photos');
-              }}
-            >
-              Edit
-            </Button>
-          }
-        >
-          {memorialData?.photos && memorialData.photos.length > 0 ? (
-            <Row gutter={[16, 16]}>
-              {memorialData.photos.map((photo, index) => (
-                <Col key={photo.id} xs={12} sm={8} md={6}>
-                  <div style={{ 
-                    aspectRatio: '1',
-                    backgroundColor: '#f5f5f5',
-                    borderRadius: '8px',
-                    overflow: 'hidden',
-                    border: '1px solid #d9d9d9'
-                  }}>
-                    {photo.fileUrl ? (
-                      <img 
-                        src={photo.fileUrl} 
-                        alt={photo.filename}
-                        style={{ 
-                          width: '100%', 
-                          height: '100%', 
-                          objectFit: 'cover' 
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                    ) : null}
-                    <div style={{ 
-                      width: '100%',
-                      height: '100%',
-                      display: photo.fileUrl ? 'none' : 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <Camera size={24} color="#bfbfbf" />
-                      <Text type="secondary" style={{ fontSize: '12px', marginTop: '8px' }}>
-                        {photo.filename || `Photo ${index + 1}`}
-                      </Text>
-                    </div>
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="No photos selected. Click Edit to add photos."
             />
           )}
         </Panel>
@@ -873,6 +661,45 @@ const MemorialProgramReviewPage = () => {
           )}
         </Panel>
       </Collapse>
+
+      {/* PDF Style Selector Component */}
+      <PDFStyleSelector 
+        selectedStyle={selectedStyle} 
+        onStyleChange={setSelectedStyle} 
+      />
+
+      {/* Generate PDF Button */}
+      <Card>
+        <div style={{ textAlign: 'center' }}>
+          <Space direction="vertical" size="large">
+            <div>
+              <Title level={3}>Ready to Generate Your Memorial Program?</Title>
+              <Text type="secondary">
+                Your selected style: <Text strong>{styleNames[selectedStyle]}</Text>
+              </Text>
+            </div>
+            <Button
+              type="primary"
+              size="large"
+              icon={isGenerating ? <Loader2 size={20} className="animate-spin" /> : <Download size={20} />}
+              onClick={generatePDF}
+              loading={isGenerating}
+              style={{ padding: '8px 32px', height: 'auto' }}
+            >
+              {isGenerating ? 'Generating PDF...' : `Generate ${styleNames[selectedStyle]} PDF`}
+            </Button>
+            {programGenerated && (
+              <Alert
+                message="Memorial Program Generated Successfully!"
+                description="Your memorial program has been downloaded to your device."
+                type="success"
+                showIcon
+                style={{ maxWidth: '400px', margin: '0 auto' }}
+              />
+            )}
+          </Space>
+        </div>
+      </Card>
     </div>
   );
 };

@@ -24,7 +24,7 @@ def create_app(config_name=None):
     """Application factory pattern"""
     
     # Create Flask app instance
-    app = Flask(__name__, static_folder='static', static_url_path='/static')
+    app = Flask(__name__)
     
     # Load configuration
     if config_name is None:
@@ -110,12 +110,6 @@ def register_blueprints(app):
         
         return send_from_directory(upload_folder, filename)
     
-
-    # Alternative route if you want to keep it under /api
-    @app.route('/florals/<filename>')
-    def serve_floral_image(filename):
-        florals_dir = os.path.join(app.static_folder, 'florals')
-        return send_from_directory(florals_dir, filename)
     
     
 

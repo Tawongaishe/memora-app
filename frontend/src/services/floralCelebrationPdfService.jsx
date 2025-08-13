@@ -4,7 +4,7 @@ import { Document, Page, Text, View, StyleSheet, pdf, Image } from '@react-pdf/r
 
 // Simple image URLs using direct Flask routes (like photos API)
 const FLORAL_IMAGES = {
-  header: "https://memora-backend-kgdg.onrender.com/florals/header-border.png",
+  header: "https://memora-backend-kgdg.onrender.com/uploads/memorial_0aa1d2f1-8f7b-40f9-ae8e-cb4e81841eb7/df54c3c591fc48219e1b52974b8e219c.png",
   footer: "https://memora-backend-kgdg.onrender.com/florals/footer-border.png"
 };
 
@@ -24,9 +24,10 @@ const styles = StyleSheet.create({
   floralHeader: {
     position: 'absolute',
     top: 0,
+    bottom: 10,
     left: 0,
     right: 0,
-    height: 60,
+    height: 200,
     width: '100%'
   },
   
@@ -263,7 +264,7 @@ const FloralHeader = () => {
   try {
     return (
       <Image 
-        src={FLORAL_DECORATIONS_BASE64.header}
+        src={FLORAL_IMAGES.header}
         style={styles.floralHeader}
       />
     );
