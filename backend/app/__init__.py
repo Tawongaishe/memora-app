@@ -10,7 +10,6 @@ from flask_mail import Mail
 from config import config
 import os
 import base64
-import jsonify
 
 # Initialize Flask extensions
 db = SQLAlchemy()
@@ -118,15 +117,7 @@ def register_blueprints(app):
         florals_dir = os.path.join(app.static_folder, 'florals')
         return send_from_directory(florals_dir, filename)
     
-    @app.route('/test-paths')
-    def test_paths():
-        florals_dir = os.path.join(app.static_folder, 'florals')
-        return jsonify({
-            'static_folder': app.static_folder,
-            'florals_dir': florals_dir,
-            'florals_exists': os.path.exists(florals_dir),
-            'files_in_florals': os.listdir(florals_dir) if os.path.exists(florals_dir) else []
-        })
+    
 
 def encode_image_to_base64(file_path):
     """Convert image file to base64 string"""
