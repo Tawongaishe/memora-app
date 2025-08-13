@@ -109,6 +109,24 @@ def register_blueprints(app):
         print(f"File exists: {os.path.exists(full_path)}")
         
         return send_from_directory(upload_folder, filename)
+    
+
+    # Alternative route if you want to keep it under /api
+    @app.route('/api/florals/<filename>')
+    def serve_floral_image_api(filename):
+        """API route for floral images"""
+        florals_dir = os.path.join(app.static_folder, 'florals')
+        return send_from_directory(florals_dir, filename)
+    
+    @app.route('/test-paths')
+    def test_paths():
+        florals_dir = os.path.join(app.static_folder, 'florals')
+        return jsonify({
+            'static_folder': app.static_folder,
+            'florals_dir': florals_dir,
+            'florals_exists': os.path.exists(florals_dir),
+            'files_in_florals': os.listdir(florals_dir) if os.path.exists(florals_dir) else []
+        })
 
 def encode_image_to_base64(file_path):
     """Convert image file to base64 string"""

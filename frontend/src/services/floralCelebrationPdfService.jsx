@@ -1,12 +1,11 @@
-
 // src/services/floralCelebrationPdfService.js
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, pdf, Image } from '@react-pdf/renderer';
 
-// Floral image URLs - UPDATE THIS WITH YOUR ACTUAL BACKEND URL
+// Simple image URLs using direct Flask routes (like photos API)
 const FLORAL_IMAGES = {
-  header: "https://memora-backend-kgdg.onrender.com/static/florals/header-border.png", // Replace with your actual URL
-  footer: "https://memora-backend-kgdg.onrender.com/static/florals/footer-border.svg"  // Replace with your actual URL
+  header: "https://memora-backend-kgdg.onrender.com/florals/header-border.png",
+  footer: "https://memora-backend-kgdg.onrender.com/florals/footer-border.svg"
 };
 
 // Style 4: Floral Celebration - Soft pastels with decorative floral elements
@@ -21,8 +20,28 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   
-  // Floral border elements (simulated with colored bars)
-  floralBorder: {
+  // Floral header styles
+  floralHeader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    width: '100%'
+  },
+  
+  // Floral footer styles  
+  floralFooter: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 40,
+    width: '100%'
+  },
+  
+  // Fallback decorative elements if images don't load
+  floralBorderFallback: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -220,6 +239,33 @@ const getSpeakerInfo = (speeches) => {
   }));
 };
 
+// Simple Floral Header Component
+const FloralHeader = () => {
+  try {
+    return <Image src={FLORAL_IMAGES.header} style={styles.floralHeader} />;
+  } catch (error) {
+    // Fallback to CSS decorations if image fails
+    return (
+      <View>
+        <View style={styles.floralBorderFallback} />
+        <View style={styles.floralAccent1} />
+        <View style={styles.floralAccent2} />
+        <View style={styles.floralAccent3} />
+      </View>
+    );
+  }
+};
+
+// Simple Floral Footer Component
+const FloralFooter = () => {
+  try {
+    return <Image src={FLORAL_IMAGES.footer} style={styles.floralFooter} />;
+  } catch (error) {
+    // Fallback to CSS decoration if image fails
+    return <View style={styles.bottomAccent} />;
+  }
+};
+
 // Cover Page Component
 const FloralCelebrationCoverPage = ({ data }) => {
   // Get cover photo
@@ -236,10 +282,7 @@ const FloralCelebrationCoverPage = ({ data }) => {
   return (
     <Page size="A4" style={styles.page}>
       {/* Floral Header */}
-      <Image 
-        src={FLORAL_IMAGES.header}
-        style={styles.floralHeader}
-      />
+      <FloralHeader />
       
       {/* Main content */}
       <View style={styles.content}>
@@ -286,10 +329,7 @@ const FloralCelebrationCoverPage = ({ data }) => {
       </View>
       
       {/* Floral Footer */}
-      <Image 
-        src={FLORAL_IMAGES.footer}
-        style={styles.floralFooter}
-      />
+      <FloralFooter />
     </Page>
   );
 };
@@ -298,10 +338,7 @@ const FloralCelebrationCoverPage = ({ data }) => {
 const FloralInteriorPage = ({ data }) => (
   <Page size="A4" style={{ backgroundColor: '#FEFEFE', padding: 60, color: '#5A5A5A', fontFamily: 'Times-Roman', position: 'relative' }}>
     {/* Floral Header */}
-    <Image 
-      src={FLORAL_IMAGES.header}
-      style={{ ...styles.floralHeader, position: 'absolute', top: 0, left: 0 }}
-    />
+    <FloralHeader />
     
     {/* Content with top margin for header */}
     <View style={{ marginTop: 70 }}>
@@ -334,10 +371,7 @@ const FloralInteriorPage = ({ data }) => (
     </View>
     
     {/* Floral Footer */}
-    <Image 
-      src={FLORAL_IMAGES.footer}
-      style={styles.floralFooter}
-    />
+    <FloralFooter />
   </Page>
 );
 
@@ -349,10 +383,7 @@ const FloralOrderOfServicePage = ({ data }) => {
   return (
     <Page size="A4" style={{ backgroundColor: '#FEFEFE', padding: 60, color: '#5A5A5A', position: 'relative' }}>
       {/* Floral Header */}
-      <Image 
-        src={FLORAL_IMAGES.header}
-        style={{ ...styles.floralHeader, position: 'absolute', top: 0, left: 0 }}
-      />
+      <FloralHeader />
       
       {/* Content with top margin for header */}
       <View style={{ marginTop: 70 }}>
@@ -399,10 +430,7 @@ const FloralOrderOfServicePage = ({ data }) => {
       </View>
       
       {/* Floral Footer */}
-      <Image 
-        src={FLORAL_IMAGES.footer}
-        style={styles.floralFooter}
-      />
+      <FloralFooter />
     </Page>
   );
 };
