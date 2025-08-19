@@ -205,7 +205,7 @@ const MemoraIntroPage = () => {
             maxWidth: '60rem',
             margin: '0 auto'
           }}>
-            Turn grief into celebration with a meaningful, personalized journey of remembrance
+            A step-by-step guide to design beautiful obituaries and memorial programs that honor your loved ones with dignity and respect.
           </p>
         </div>
       </section>
