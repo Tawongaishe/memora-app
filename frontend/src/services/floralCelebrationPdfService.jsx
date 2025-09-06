@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
   },
   
   photoContainer: {
-    width: 400,
-    height: 400,
+    width: 300,
+    height: 300,
     backgroundColor: '#F8F5F3',
     alignSelf: 'center',
     marginBottom: 40,
@@ -494,7 +494,7 @@ const FloralPhotoGalleryPage = ({ data }) => {
             ) : (
               <View key={photo.id || index} style={{ 
                 width: 200, 
-                height: 150, 
+                height: 200, 
                 backgroundColor: '#F8F5F3', 
                 border: '3px solid #E8D5C4',
                 borderRadius: 8,
