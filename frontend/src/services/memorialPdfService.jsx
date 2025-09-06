@@ -126,6 +126,8 @@ const styles = StyleSheet.create({
     transform: 'rotate(-90deg)',
     transformOrigin: 'left bottom'
   },
+
+
   
   // INTERIOR PAGE STYLES
   interiorPage: {
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: 'Times-Bold',
     color: '#D1A27A',
-    textAlign: 'center',
+    textAlign: 'left',
     letterSpacing: 8,
     marginBottom: 40,
     textTransform: 'uppercase'
@@ -188,10 +190,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Times-Bold',
     color: '#D1A27A',
+    position: 'absolute',
     transform: 'rotate(-90deg)',
-    transformOrigin: 'center',
+    transformOrigin: 'left bottom',
     letterSpacing: 3
   },
+
+  inLovingScript2: {
+    fontSize: 28,
+    fontFamily: 'Times-Italic',
+    color: '#D1A27A',
+    position: 'absolute',
+    bottom: 400,
+    left: 40,
+    transform: 'rotate(-90deg)',
+    transformOrigin: 'bottom'
+  },
+
+  
   
   orderContent: {
     marginLeft: 180,
@@ -663,78 +679,126 @@ const ObituaryPage = ({ data }) => {
 };
 
 // Order of Service Page Component - updated to show memorial details properly
+// Order of Service Page (dark theme, speakers only)
 const OrderOfServicePage = ({ data }) => {
-  const speakers = getSpeakerInfo(data?.speeches);
-  const memorialDetails = parseMemorialDetails(data?.bodyViewing?.viewingNotes);
-  
+  const speakers = getSpeakerInfo(data?.speeches || []);
+
   return (
     <Page size="A4" style={styles.orderPage}>
-      {/* Sidebar with "ORDER OF SERVICE" - fixed */}
+      {/* left vertical sidebar */}
       <View style={styles.orderSidebar}>
-        <Text style={styles.orderSidebarText}>ORDER OF SERVICE</Text>
+        <Text style={styles.inLovingScript2} wrap={false}>PROGAM</Text>
       </View>
-      
-      {/* Main content */}
+
+      {/* main content */}
       <View style={styles.orderContent}>
-        {speakers.length > 0 && speakers.map((speaker, index) => (
-          <View key={index} style={styles.orderItem}>
-            <Text style={styles.orderRole}>
-              {speaker.role.toUpperCase()}
-            </Text>
-            <Text style={styles.orderSpeaker}>
-              {speaker.name}
-              {speaker.relationship && ` - ${speaker.relationship}`}
-            </Text>
-          </View>
-        ))}
-        
-        {/* Service Information */}
-        {(memorialDetails.date || memorialDetails.time || memorialDetails.location || data?.bodyViewing || data?.burial || data?.repass) && (
-          <>
-            <View style={styles.separator} />
-            
-            {/* Memorial Service Info from memorial details */}
-    
-            
-            {data?.bodyViewing && data.bodyViewing.hasViewing !== false && data.bodyViewing.viewingLocation && (
-              <View style={styles.serviceInfoSection}>
-                <Text style={styles.serviceInfoTitle}>Viewing</Text>
-                <Text style={styles.serviceInfoText}>Location: {data.bodyViewing.viewingLocation}</Text>
-                {data.bodyViewing.viewingDate && (
-                  <Text style={styles.serviceInfoText}>Date: {formatDate(data.bodyViewing.viewingDate)}</Text>
-                )}
-              </View>
-            )}
-            
-            {data?.burial && (
-              <View style={styles.serviceInfoSection}>
-                <Text style={styles.serviceInfoTitle}>
-                  {data.burial.burialType === 'cremation' ? 'Cremation' : 'Burial'}
-                </Text>
-                {data.burial.cemeteryName && (
-                  <Text style={styles.serviceInfoText}>Location: {data.burial.cemeteryName}</Text>
-                )}
-                {data.burial.burialAddress && (
-                  <Text style={styles.serviceInfoText}>{data.burial.burialAddress}</Text>
-                )}
-              </View>
-            )}
-            
-            {data?.repass && data.repass.hasRepass !== false && data.repass.venueName && (
-              <View style={styles.serviceInfoSection}>
-                <Text style={styles.serviceInfoTitle}>Reception</Text>
-                <Text style={styles.serviceInfoText}>Location: {data.repass.venueName}</Text>
-                {data.repass.repassAddress && (
-                  <Text style={styles.serviceInfoText}>{data.repass.repassAddress}</Text>
-                )}
-              </View>
-            )}
-          </>
+        <Text style={[styles.pageTitle, { marginTop: 0 }]}>Order of Service</Text>
+
+        {speakers.length > 0 ? (
+          speakers.map((s, i) => (
+            <View key={i} style={styles.orderItem}>
+              <Text style={styles.orderRole}>{s.role}</Text>
+              <Text style={styles.orderSpeaker}>
+                {s.name}{s.relationship ? ` — ${s.relationship}` : ''}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.serviceInfoText}>
+            Program details to be announced.
+          </Text>
         )}
       </View>
     </Page>
   );
 };
+// Arrangements Page (Service, Burial/Cremation, Repass)
+const ArrangementsPage = ({ data }) => {
+  const memorialDetails = parseMemorialDetails(data?.bodyViewing?.viewingNotes);
+  const burial = data?.burial || {};
+  const repass = data?.repass || {};
+
+  const hasService = !!(memorialDetails.date || memorialDetails.time || memorialDetails.location);
+  const hasBurial  = !!(burial.burialType || burial.burialDate || burial.burialTime || burial.burialAddress || burial.burialNotes);
+  const hasRepass  = !!(repass.hasRepass && (repass.repassAddress || repass.repassDate || repass.repassTime || repass.repassNotes));
+
+  return (
+    <Page size="A4" style={styles.interiorPage}>
+      <Text style={styles.pageTitle}>Arrangements</Text>
+
+      {/* Memorial Service */}
+      {hasService && (
+        <View style={styles.serviceInfoSection}>
+          <Text style={styles.serviceInfoTitle}>Memorial Service</Text>
+
+          {memorialDetails.date && (
+            <Text style={styles.serviceInfoText}>
+              {memorialDetails.date}{memorialDetails.time ? ` at ${memorialDetails.time}` : ''}
+            </Text>
+          )}
+          {!memorialDetails.date && memorialDetails.time && (
+            <Text style={styles.serviceInfoText}>{memorialDetails.time}</Text>
+          )}
+          {memorialDetails.location && (
+            <Text style={styles.serviceInfoText}>{memorialDetails.location}</Text>
+          )}
+        </View>
+      )}
+
+      {/* Burial / Cremation */}
+      {hasBurial && (
+        <View style={styles.serviceInfoSection}>
+          <Text style={styles.serviceInfoTitle}>
+            {burial.burialType ? burial.burialType.charAt(0).toUpperCase() + burial.burialType.slice(1) : 'Burial / Cremation'}
+          </Text>
+
+          {(burial.burialDate || burial.burialTime) && (
+            <Text style={styles.serviceInfoText}>
+              {burial.burialDate ? formatDate(burial.burialDate) : ''}{burial.burialDate && burial.burialTime ? ' at ' : ''}{burial.burialTime || ''}
+            </Text>
+          )}
+          {burial.burialAddress && (
+            <Text style={styles.serviceInfoText}>{burial.burialAddress}</Text>
+          )}
+          {burial.burialNotes && (
+            <Text style={[styles.serviceInfoText, { fontSize: 12 }]}>
+              {burial.burialNotes}
+            </Text>
+          )}
+        </View>
+      )}
+
+      {/* Repass */}
+      {hasRepass && (
+        <View style={styles.serviceInfoSection}>
+          <Text style={styles.serviceInfoTitle}>Repass Gathering</Text>
+
+          {(repass.repassDate || repass.repassTime) && (
+            <Text style={styles.serviceInfoText}>
+              {repass.repassDate ? formatDate(repass.repassDate) : ''}{repass.repassDate && repass.repassTime ? ' at ' : ''}{repass.repassTime || ''}
+            </Text>
+          )}
+          {repass.repassAddress && (
+            <Text style={styles.serviceInfoText}>{repass.repassAddress.trim()}</Text>
+          )}
+          {repass.repassNotes && (
+            <Text style={[styles.serviceInfoText, { fontSize: 12 }]}>
+              {repass.repassNotes}
+            </Text>
+          )}
+        </View>
+      )}
+
+      {/* Nothing present */}
+      {!hasService && !hasBurial && !hasRepass && (
+        <Text style={[styles.serviceInfoText, { textAlign: 'center' }]}>
+          Additional arrangements will be shared with family and friends.
+        </Text>
+      )}
+    </Page>
+  );
+};
+
 
 // Acknowledgment Page Component
 const AcknowledgmentPage = ({ data }) => (
@@ -811,6 +875,7 @@ const MemorialPDFDocument = ({ data }) => (
     <CoverPage data={data} />
     <ObituaryPage data={data} />
     <OrderOfServicePage data={data} />
+    <ArrangementsPage data={data} />
     <PhotoGalleryPage data={data} />
     <QuotePage data={data} />
     <AcknowledgmentPage data={data} />
