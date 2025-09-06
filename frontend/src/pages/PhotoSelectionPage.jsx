@@ -81,8 +81,8 @@ const PhotoSelectionPage = () => {
     if (files.length > 0) {
       // Check if adding these files would exceed the limit
       const totalAfterAdd = existingPhotos.gallery.length + galleryPhotos.length + files.length;
-      if (totalAfterAdd > 2) {
-        setError(`Too many gallery photos. Maximum 2 allowed. You currently have ${existingPhotos.gallery.length} uploaded.`);
+      if (totalAfterAdd > 10) {
+        setError(`Too many gallery photos. Maximum 10 allowed. You currently have ${existingPhotos.gallery.length} uploaded.`);
         return;
       }
 
