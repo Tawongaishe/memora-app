@@ -436,27 +436,45 @@ const FloralOrderOfServicePage = ({ data }) => {
         
         <View style={{ width: 80, height: 1, backgroundColor: '#E8D5C4', alignSelf: 'center', marginVertical: 30 }} />
         
-        {/* Service Information */}
-        <View style={{ padding: 20, backgroundColor: '#F8F5F3', border: '2px solid #E8D5C4', borderRadius: 8 }}>
-          <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 15, textAlign: 'center' }}>
-            Service Information
-          </Text>
-          {memorialDetails.date && (
-            <Text style={{ fontSize: 14, color: '#6B6B6B', marginBottom: 5, textAlign: 'center' }}>
-              {memorialDetails.date}
-            </Text>
-          )}
-          {memorialDetails.time && (
-            <Text style={{ fontSize: 14, color: '#6B6B6B', marginBottom: 5, textAlign: 'center' }}>
-              {memorialDetails.time}
-            </Text>
-          )}
-          {memorialDetails.location && (
-            <Text style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center' }}>
-              {memorialDetails.location}
-            </Text>
-          )}
-        </View>
+        {/* Repass (only if present) */}
+{(() => {
+  const repass = data?.repass;
+  const hasRepass =
+    repass?.hasRepass &&
+    (repass?.repassAddress || repass?.repassDate || repass?.repassTime || repass?.repassNotes);
+
+  if (!hasRepass) return null;
+
+  return (
+    <View style={{ padding: 20, backgroundColor: '#F8F5F3', border: '2px solid #E8D5C4', borderRadius: 8 }}>
+      <Text style={{ fontSize: 16, fontFamily: 'Times-Bold', color: '#8A7968', marginBottom: 15, textAlign: 'center' }}>
+        Repass Gathering
+      </Text>
+
+      {/* Address */}
+      {repass?.repassAddress && (
+        <Text style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center', marginBottom: 5 }}>
+          {repass.repassAddress.trim()}
+        </Text>
+      )}
+
+      {/* Date / Time */}
+      {(repass?.repassDate || repass?.repassTime) && (
+        <Text style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center', marginBottom: 5 }}>
+          {repass?.repassDate ? formatDate(repass.repassDate) : ''}{repass?.repassDate && repass?.repassTime ? ' at ' : ''}{repass?.repassTime || ''}
+        </Text>
+      )}
+
+      {/* Notes */}
+      {repass?.repassNotes && (
+        <Text style={{ fontSize: 12, color: '#7B7B7B', textAlign: 'center' }}>
+          {repass.repassNotes}
+        </Text>
+      )}
+    </View>
+  );
+})()}
+
       </View>
       
       {/* Floral Footer */}
@@ -483,9 +501,9 @@ const FloralPhotoGalleryPage = ({ data }) => {
       
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: 15 }}>
         {allPhotos.length > 0 ? (
-          allPhotos.slice(0, 6).map((photo, index) => (
+          allPhotos.slice(0, 10).map((photo, index) => (
             photo?.fileUrl ? (
-              <View key={photo.id || index} style={{ width: 160, height: 120, border: '3px solid #E8D5C4', borderRadius: 8, marginBottom: 15 }}>
+              <View key={photo.id || index} style={{ width: 200, height: 200, border: '3px solid #E8D5C4', borderRadius: 8, marginBottom: 15 }}>
                 <Image 
                   src={photo.fileUrl}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 5 }}

@@ -326,7 +326,7 @@ const PhotoSelectionPage = () => {
           )}
 
           {/* Gallery Photo Upload */}
-          {(existingPhotos.gallery.length + galleryPhotos.length) < 2 && (
+          {(existingPhotos.gallery.length + galleryPhotos.length) < 10 && (
             <div style={{ marginBottom: '1rem' }}>
               <input type="file" accept="image/*" multiple onChange={handleGalleryPhotoSelect} style={{ display: 'none' }} id="gallery-input" />
               <label htmlFor="gallery-input" style={{
@@ -336,7 +336,7 @@ const PhotoSelectionPage = () => {
               }}>
                 <Upload size={20} color="#9ca3af" />
                 <span style={{ marginTop: '0.25rem', color: '#6b7280', fontSize: '0.875rem' }}>
-                  Upload Gallery Photos ({2 - existingPhotos.gallery.length - galleryPhotos.length} remaining)
+                  Upload Gallery Photos ({10 - existingPhotos.gallery.length - galleryPhotos.length} remaining)
                 </span>
               </label>
             </div>
