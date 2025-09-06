@@ -157,22 +157,7 @@ const MemorialProgramReviewPage = () => {
     }
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `Memorial Program - ${memorialData?.obituary?.fullName}`,
-          text: 'Memorial service program',
-        });
-      } catch (error) {
-        console.log('Error sharing:', error);
-      }
-    } else {
-      // Fallback - copy link to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      message.success('Link copied to clipboard!');
-    }
-  };
+
 
   // Helper function to check if section has data
   const hasData = (data) => {
@@ -247,13 +232,7 @@ const MemorialProgramReviewPage = () => {
           </Col>
           <Col>
             <Space>
-              <Button
-                icon={<Share2 size={16} />}
-                onClick={handleShare}
-                disabled={isGenerating}
-              >
-                Share
-              </Button>
+             
             </Space>
           </Col>
         </Row>
