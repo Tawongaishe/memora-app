@@ -301,7 +301,7 @@ const PhotoSelectionPage = () => {
           boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
         }}>
           <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '1rem' }}>
-            Gallery Photos ({existingPhotos.gallery.length + galleryPhotos.length}/2) {(existingPhotos.gallery.length + galleryPhotos.length) > 0 ? '✓' : '(Optional)'}
+            Gallery Photos ({existingPhotos.gallery.length + galleryPhotos.length}/10) {(existingPhotos.gallery.length + galleryPhotos.length) > 0 ? '✓' : '(Optional)'}
           </h3>
 
           {/* Existing Gallery Photos */}
