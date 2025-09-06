@@ -694,20 +694,7 @@ const OrderOfServicePage = ({ data }) => {
             <View style={styles.separator} />
             
             {/* Memorial Service Info from memorial details */}
-            {(memorialDetails.date || memorialDetails.time || memorialDetails.location) && (
-              <View style={styles.serviceInfoSection}>
-                <Text style={styles.serviceInfoTitle}>Memorial Service</Text>
-                {memorialDetails.date && (
-                  <Text style={styles.serviceInfoText}>Date: {memorialDetails.date}</Text>
-                )}
-                {memorialDetails.time && (
-                  <Text style={styles.serviceInfoText}>Time: {memorialDetails.time}</Text>
-                )}
-                {memorialDetails.location && (
-                  <Text style={styles.serviceInfoText}>Location: {memorialDetails.location}</Text>
-                )}
-              </View>
-            )}
+    
             
             {data?.bodyViewing && data.bodyViewing.hasViewing !== false && data.bodyViewing.viewingLocation && (
               <View style={styles.serviceInfoSection}>
