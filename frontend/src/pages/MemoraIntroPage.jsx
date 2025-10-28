@@ -205,8 +205,18 @@ const MemoraIntroPage = () => {
             maxWidth: '60rem',
             margin: '0 auto'
           }}>
-            A step-by-step guide to design beautiful obituaries and memorial programs that honor your loved ones with dignity and respect.
+            All-in-one memorial tool to create obituaries and programs with dignity. Everything in one place to honor your loved one with love and respect
           </p>
+
+          {/* Audience-specific short lines */}
+          <div style={{
+            marginTop: '1rem',
+            color: 'rgba(255,255,255,0.82)',
+            maxWidth: '60rem',
+            margin: '1rem auto 0 auto',
+            fontSize: '1rem'
+          }}>
+          </div>
         </div>
       </section>
 
@@ -281,7 +291,7 @@ const MemoraIntroPage = () => {
               onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
               onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
             >
-              <span>Create a Memorial</span>
+              <span>Start a Memorial</span>
               <ArrowRight size={24} />
             </button>
 
@@ -306,15 +316,15 @@ const MemoraIntroPage = () => {
             </button>
           </div>
 
-          <div style={{
-            ...getElementStyle(1, 300),
-            padding: '1.5rem',
-            background: 'rgba(255,255,255,0.08)',
-            borderRadius: '1rem',
-            border: '1px solid rgba(255,255,255,0.2)',
-            maxWidth: '40rem',
-            margin: '0 auto'
-          }}>
+            <div style={{
+              ...getElementStyle(1, 300),
+              padding: '1.5rem',
+              background: 'rgba(255,255,255,0.08)',
+              borderRadius: '1rem',
+              border: '1px solid rgba(255,255,255,0.2)',
+              maxWidth: '40rem',
+              margin: '0 auto'
+            }}>
             <p style={{
               fontSize: '1rem',
               color: 'rgba(255,255,255,0.8)',
@@ -342,14 +352,66 @@ const MemoraIntroPage = () => {
               onMouseLeave={(e) => e.target.style.background = 'transparent'}
             >
               <Clock size={18} />
-              <span>Someone Has Passed - Now What?</span>
+              <span>Someone Has Passed — What to Do Next?</span>
             </button>
           </div>
         </div>
       </section>
 
-      {/* Section 3: Features */}
+      {/* Section 2.5: Supportive Help Section */}
       <section style={{
+        minHeight: '60vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        zIndex: 10,
+        padding: '3rem 2rem',
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F1419 100%)'
+      }}>
+        <div style={{ ...getElementStyle(1, 0), maxWidth: '70rem' }}>
+          <h2 style={{
+            fontSize: 'clamp(2rem, 4.5vw, 3rem)',
+            fontWeight: '400',
+            color: 'rgba(244, 239, 239, 0.95)',
+            margin: '0 0 1rem 0',
+            lineHeight: '1.2',
+            fontFamily: 'Georgia, serif'
+          }}>
+            We're Here With You Every Step of the Way
+          </h2>
+
+          <p style={{
+            fontSize: '1.125rem',
+            color: 'rgba(241, 234, 234, 0.8)',
+            maxWidth: '60rem',
+            margin: '0 auto 1rem auto'
+          }}>
+            Losing a loved one is never easy. Memora is here to help you honor their life without added stress. Together, you can:
+          </p>
+
+          <ul style={{
+            textAlign: 'left',
+            display: 'inline-block',
+            margin: '1rem auto 0 auto',
+            maxWidth: '48rem',
+            color: 'rgba(255, 251, 251, 0.8)',
+            fontSize: '1rem',
+            lineHeight: '1.6'
+          }}>
+            {/* Assumed four supportive points for the user flow */}
+            <li>Follow clear, immediate checklists for urgent next steps.</li>
+            <li>Build meaningful obituaries and professional memorial programs with guided forms.</li>
+            <li>Collect and organize photos, memories, and multimedia for the service.</li>
+            <li>Coordinate service details, speaker assignments, and print-ready PDFs.</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Section 3: Features */}
+      {/* <section style={{
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
@@ -360,7 +422,7 @@ const MemoraIntroPage = () => {
         padding: '4rem 2rem',
         background: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F1419 100%)'
       }}>
-        <div style={{
+        { <div style={{
           ...getElementStyle(2, 0),
           textAlign: 'center',
           marginBottom: '4rem'
@@ -375,7 +437,7 @@ const MemoraIntroPage = () => {
           }}>
             Everything You Need
           </h2>
-        </div>
+        </div> }
 
         <div style={{
           display: 'grid',
@@ -457,7 +519,7 @@ const MemoraIntroPage = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Section 4: The Process */}
       <section style={{

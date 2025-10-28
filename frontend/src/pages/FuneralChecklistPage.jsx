@@ -169,7 +169,7 @@ const FuneralChecklistPage = () => {
       }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h2 style={{ ...echoPageStyles.mainTitle, fontSize: '2.5rem', marginBottom: '1rem' }}>
-            Someone Has Passed - Now What?
+            Someone Has Passed — What to Do Next?
           </h2>
           <p style={{ ...echoPageStyles.culturalText, fontSize: '1.125rem', marginBottom: '2rem' }}>
             A comprehensive guide to help you navigate this difficult time with compassion and organization.
@@ -316,7 +316,7 @@ const FuneralChecklistPage = () => {
             onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
             onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
           >
-            <span>Begin Memorial Planning with Memora</span>
+            <span>Begin Creating Their Memorial</span>
             <ArrowRight size={24} />
           </button>
         </div>

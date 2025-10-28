@@ -205,8 +205,8 @@ const ModularObituaryPage = () => {
   if (currentStep === 'form') {
     return (
       <UniversalFormPage
-        title="Obituary Information"
-        prompt="Please provide the following information to create a meaningful obituary that honors your loved one's life and legacy."
+        title="Obituary Information - Tell us about your loved one"
+        prompt="Obituary Information - Tell us about your loved one, their story, their memories, their milestones and we'll guide you in creating a meaningful obituary."
         formFields={formFields}
         onBack={handleFormBack}
         onNext={handleFormNext}
